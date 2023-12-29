@@ -19,10 +19,10 @@ namespace Metr
     /// </summary>
     public partial class ActionsWindow : Window
     {
-        public ActionsWindow(MetrBaseEntities context)
+        public ActionsWindow(MetrBaseEntities context, int userID = 0)
         {
             InitializeComponent();
-            mainGrid.ItemsSource = context.Actions.ToList();
+            mainGrid.ItemsSource = context.Actions.OrderBy(a=>a.ActionDate).Where(a => userID != 0 ? a.UserID == userID : true).ToList();
         }
     }
 }

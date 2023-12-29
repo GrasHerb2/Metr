@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Metr"
         mc:Ignorable="d"
-        Title="ActionsWindow" MinHeight="450" MinWidth="800">
+        Title="Журнал действий" MinHeight="450" MinWidth="800">
     <Window.Resources>
 
         <Style TargetType="DataGrid">
@@ -72,12 +72,40 @@
         </Style>
     </Window.Resources>
     <Viewbox VerticalAlignment="Top" Width="800">
-        <DataGrid x:Name="mainGrid" Height="430" Width="800" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" >
+        <DataGrid x:Name="mainGrid" Height="430" Width="600" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Header="Пользователь" Binding="{Binding User.FullName}"/>
-                <DataGridTextColumn Width="1.5*" Header="Действие" Binding="{Binding ActionText}"/>
-                <DataGridTextColumn Width=".75*" Header="Дата" Binding="{Binding ActionDate, StringFormat=dd.MM.yyyy}"/>
-                <DataGridTextColumn Width="*" Header="Компьютер" Binding="{Binding ComputerName}"/>
+                <DataGridTextColumn Width="*" Header="Пользователь" Binding="{Binding User.FullName}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="1.5*" Header="Действие" Binding="{Binding ActionText}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width=".75*" Header="Дата" Binding="{Binding ActionDate, StringFormat=dd.MM.yyyy}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Компьютер" Binding="{Binding ComputerName}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Viewbox>

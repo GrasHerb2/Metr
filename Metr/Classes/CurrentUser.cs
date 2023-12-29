@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Metr.Classes
 {
-
+    /// <summary>
+    /// Класс для пользователя авторизованного в системе
+    /// </summary>
     public class CurrentUser
     {
         public int Id { get; set; }

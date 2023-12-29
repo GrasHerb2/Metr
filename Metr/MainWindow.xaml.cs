@@ -39,8 +39,10 @@ namespace Metr
         {
             InitializeComponent();
             logIn();
-
+            Thread thread = new Thread(UpdateTabs) { IsBackground = true };
+            thread.Start();
         }
+        //Метод запроса авторизации
         void logIn()
         {
             AuthWindow authWin = new AuthWindow();
@@ -59,8 +61,6 @@ namespace Metr
                         User = new CurrentUser() { Id = 1, FullName = "Гость", RoleID = 1 };
                         MessageBox.Show("В режиме просмотра вам не доступны действия связанные с редактированием", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                    Thread thread = new Thread(UpdateTabs) { IsBackground = true };
-                    thread.Start();
                     break;
 
                 case false:
@@ -68,6 +68,7 @@ namespace Metr
                     break;
             }
         }
+        //Метод обновления вкладок
         void UpdateTabs()
         {           
             try
@@ -94,7 +95,7 @@ namespace Metr
                     excGrid.ItemsSource = DeviceData.deviceListExc;
 
                     pBar.Visibility = Visibility.Collapsed;
-                    searchTBObj.ItemsSource = (context.Object.Select(d=>d.Name).ToList());
+                    searchTBObj.ItemsSource = (context.Object.OrderBy(d=>d.Name).Select(d=>d.Name).ToList());
                 }));                
             }
             catch (Exception ex)
@@ -106,6 +107,7 @@ namespace Metr
                 }));
             }
         }
+        //Метод запуска потока поиска
         void startSearch()
         {
             try
@@ -359,22 +361,68 @@ namespace Metr
 
         private void userBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                if (User.RoleID == 3)
+                {
+                    UserManagmentWindow umw = new UserManagmentWindow(User.Id);
+                    umw.ShowDialog();
+                }
+                else MessageBox.Show("Для данной функции необходимо иметь доступ 'Администратор'");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void journalBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            ActionsWindow actionsWindow = new ActionsWindow(context);
+            actionsWindow.Show();
         }
 
         private void infoBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("Metr - программа предназначенная для ведения журнала приборов, отслеживания их срока годности и составления журнала ППР.\nРазработчик: Асонов Г.С.", "О программе", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void signOutBtn_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Вы хотите выйти из текущей учётной записи?", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) logIn();
+        }
+
+        private void cRec_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (User.RoleID >= 2)
+                {
+                    List<Device> devices = new List<Device>();
+                    foreach (DeviceData d in excGrid.SelectedItems)
+                    {
+                        devices.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
+                    }
+                    DeviceData.deviceRec(devices, context, User.Id);
+                }
+                else MessageBox.Show("Для восстановления необходимо иметь роль 'Пользователь' или выше");
+                Thread thread = new Thread(UpdateTabs) { IsBackground = true };
+                thread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void pprGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+
+        }
+
+        private void excGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+
         }
     }
 }
