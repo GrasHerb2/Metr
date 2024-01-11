@@ -12,17 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Metr
+namespace Metr._Windows
 {
     /// <summary>
-    /// Логика взаимодействия для ActionsWindow.xaml
+    /// Логика взаимодействия для ExcelExportWindow.xaml
     /// </summary>
-    public partial class ActionsWindow : Window
+    public partial class ExcelExportWindow : Window
     {
-        public ActionsWindow(MetrBaseEntities context, int userID = 0)
+        public ExcelExportWindow()
         {
             InitializeComponent();
-            mainGrid.ItemsSource = context.Actions.OrderBy(a=>a.ActionDate).Where(a => userID != 0 ? a.UserID == userID : true).ToList();
         }
     }
 }

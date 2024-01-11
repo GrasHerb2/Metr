@@ -84,7 +84,7 @@
     <Compile Include="Actions.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="ActionsWindow.xaml.cs">
+    <Compile Include="_Windows\ActionsWindow.xaml.cs">
       <DependentUpon>ActionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\UControl.cs" />
@@ -96,13 +96,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="DeviceWin.xaml.cs">
+    <Compile Include="_Windows\DeviceWin.xaml.cs">
       <DependentUpon>DeviceWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Object.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="RegWindow.xaml.cs">
+    <Compile Include="_Windows\ExcelExportWindow.xaml.cs">
+      <DependentUpon>ExcelExportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="_Windows\RegWindow.xaml.cs">
       <DependentUpon>RegWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Role.cs">
@@ -114,21 +117,25 @@
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserActivate.xaml.cs">
+    <Compile Include="_Windows\UserActivate.xaml.cs">
       <DependentUpon>UserActivate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserManagmentWindow.xaml.cs">
+    <Compile Include="_Windows\UserManagmentWindow.xaml.cs">
       <DependentUpon>UserManagmentWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="ActionsWindow.xaml">
+    <Page Include="_Windows\ActionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AuthWindow.xaml">
+    <Page Include="_Windows\AuthWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="_Windows\ExcelExportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="_Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -136,20 +143,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AuthWindow.xaml.cs">
+    <Compile Include="_Windows\AuthWindow.xaml.cs">
       <DependentUpon>AuthWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\CurrentUser.cs" />
     <Compile Include="Classes\DeviceData.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="_Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="DeviceWin.xaml">
+    <Page Include="_Windows\DeviceWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RegWindow.xaml">
+    <Page Include="_Windows\RegWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,11 +164,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserActivate.xaml">
+    <Page Include="_Windows\UserActivate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserManagmentWindow.xaml">
+    <Page Include="_Windows\UserManagmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

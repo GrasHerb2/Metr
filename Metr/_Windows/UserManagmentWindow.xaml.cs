@@ -60,7 +60,7 @@ namespace Metr
 
             UControl user = mainGrid.SelectedItem as UControl;
 
-            ActionsWindow actionsWindow = new ActionsWindow(context, user.userID);
+            ActionsWindow actionsWindow = new ActionsWindow(user.userID);
             actionsWindow.ShowDialog();
         }
         private void userActionsBtn_Click(object sender, RoutedEventArgs e)
@@ -145,7 +145,7 @@ namespace Metr
             }
 
             UControl user = deaGrid.SelectedItem as UControl;
-            ActionsWindow actionsWindow = new ActionsWindow(context, user.userID);
+            ActionsWindow actionsWindow = new ActionsWindow(user.userID);
             actionsWindow.ShowDialog();
         }
         private void deaActions_Click(object sender, RoutedEventArgs e)
