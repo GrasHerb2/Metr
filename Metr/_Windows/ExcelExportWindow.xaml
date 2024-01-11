@@ -1,0 +1,38 @@
+﻿<Window x:Class="Metr._Windows.ExcelExportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Metr._Windows"
+        mc:Ignorable="d"
+        Title="Экспорт" Height="412" Width="478">
+    <Viewbox VerticalAlignment="Top">
+        <StackPanel Margin="5" CanVerticallyScroll="True" Height="300">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Вид таблиц"/>
+                <ComboBox x:Name="TableTypeCmB" Width="100"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center" x:Name="SearchUseChB"/>
+                <Label Content="С учётом выборки? (Результаты поиска)"/>
+            </StackPanel>
+            <StackPanel IsEnabled="False" Orientation="Horizontal">
+                <Label Content="Из таблицы"/>
+                <ComboBox SelectedIndex="0" Width="100">
+                    <ComboBoxItem Content="Все"/>
+                    <ComboBoxItem Content="Приборы"/>
+                    <ComboBoxItem Content="ППР"/>
+                    <ComboBoxItem Content="Исключённые"/>
+                </ComboBox>
+            </StackPanel>
+            <Label Content="Выбранные столбцы"/>
+            <DataGrid MaxHeight="150" x:Name="ColumnsDG" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Столбец" Width="3*" Binding="{Binding Column}"/>
+                    <DataGridCheckBoxColumn Header="Видимость" Width="*" Binding="{Binding Active}"/>
+                </DataGrid.Columns>
+                
+            </DataGrid>
+        </StackPanel>
+    </Viewbox>
+</Window>
