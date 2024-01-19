@@ -1,4 +1,5 @@
-﻿using Metr.Classes;
+﻿using Metr._Windows;
+using Metr.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -355,7 +356,8 @@ namespace Metr
 
         private void printBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            ExcelExportWindow excelExport = new ExcelExportWindow();
+            excelExport.ShowDialog();
         }
 
         private void userBtn_Click(object sender, RoutedEventArgs e)

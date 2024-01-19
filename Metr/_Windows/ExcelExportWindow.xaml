@@ -9,30 +9,63 @@
     <Viewbox VerticalAlignment="Top">
         <StackPanel Margin="5" CanVerticallyScroll="True" Height="300">
             <StackPanel Orientation="Horizontal">
-                <Label Content="Вид таблиц"/>
-                <ComboBox x:Name="TableTypeCmB" Width="100"/>
+                <Label Content="Вид экспорта"/>
+                <ComboBox x:Name="TableTypeCmB" Width="200" SelectionChanged="TableTypeCmB_SelectionChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <CheckBox VerticalAlignment="Center" x:Name="SearchUseChB"/>
-                <Label Content="С учётом выборки? (Результаты поиска)"/>
+                <Label Content="С учётом выборки (Результаты поиска в главном окне)"/>
             </StackPanel>
-            <StackPanel IsEnabled="False" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
                 <Label Content="Из таблицы"/>
-                <ComboBox SelectedIndex="0" Width="100">
+                <ComboBox  IsEnabled="False" x:Name="OriginTableCmB" SelectedIndex="0" Width="100">
                     <ComboBoxItem Content="Все"/>
                     <ComboBoxItem Content="Приборы"/>
                     <ComboBoxItem Content="ППР"/>
                     <ComboBoxItem Content="Исключённые"/>
                 </ComboBox>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center" x:Name="ObjSortChB"/>
+                <Label Content="Разделение приборов по объектам"/>
+            </StackPanel>
             <Label Content="Выбранные столбцы"/>
-            <DataGrid MaxHeight="150" x:Name="ColumnsDG" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" AutoGenerateColumns="False">
+            <DataGrid Width="400" Height="150" x:Name="ColumnsDG" CanUserSortColumns="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Столбец" Width="3*" Binding="{Binding Column}"/>
-                    <DataGridCheckBoxColumn Header="Видимость" Width="*" Binding="{Binding Active}"/>
+                    <DataGridTextColumn Header="Заголовок" Width="150" Binding="{Binding Header}"/>
+                    <DataGridTemplateColumn Header="Поле" Width="175">
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox x:Name="fieldCmb" SelectedIndex="{Binding Field}">
+                                    <ComboBoxItem Content="Пусто"/>
+                                    <ComboBoxItem Content="Порядковый номер"/>
+                                    <ComboBoxItem Content="Название прибора"/>
+                                    <ComboBoxItem Content="Заводской номер"/>
+                                    <ComboBoxItem Content="Объект"/>
+                                    <ComboBoxItem Content="Измеряемый параметр"/>
+                                    <ComboBoxItem Content="Единицы измерения"/>
+                                    <ComboBoxItem Content="МП (Срок годности)"/>
+                                    <ComboBoxItem Content="ППР (Только текущий месяц)"/>
+                                    <ComboBoxItem Content="МП/ППР 1"/>
+                                    <ComboBoxItem Content="ППР 1"/>
+                                    <ComboBoxItem Content="ППР 2"/>
+                                    <ComboBoxItem Content="ППР 3"/>
+                                    <ComboBoxItem Content="ППР 4"/>
+                                    <ComboBoxItem Content="Период ППР"/>
+                                    <ComboBoxItem Content="Примечания"/>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="*нажмите дважды для изменения*"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 
             </DataGrid>
+            <Button x:Name="expBtn" Click="expBtn_Click" Content="Экспорт" Width="75" Margin="5" HorizontalAlignment="Right"/>
         </StackPanel>
     </Viewbox>
 </Window>

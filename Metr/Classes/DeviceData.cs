@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Diagnostics.Tracing;
 using System.Diagnostics.Eventing.Reader;
 using System.Threading;
+using Metr.Properties;
 
 namespace Metr.Classes
 {
@@ -35,11 +36,14 @@ namespace Metr.Classes
         public DateTime? pprDate2 { get; set; }
         public DateTime? pprDate3 { get; set; }
         public DateTime? pprDate4 { get; set; }
+        public DateTime? pprMonthDate { get; set; }
         public bool Defect { get; set; }
         public bool Delete { get; set; }
         public bool PPR { get; set; }
         public string Stroke { get; set; }
         public string Period { get; set; }
+
+        private const bool V = true;
 
 
         //Далее общие параметры и методы для класса DeviceData
@@ -95,6 +99,9 @@ namespace Metr.Classes
         /// </summary>
         /// <param name="pprYear">Если 0, приравнивается к текущему году. По умолчанию = 0 (выбирает год текущей даты)</param>
         /// <returns>Возвращает deviceList содержащий все приборы в БД</returns>
+        
+        
+        
         public static List<DeviceData> dataUpdate(int pprYear = 0)
         {
             devices = MetrBaseEntities.GetContext().Device.ToList();
@@ -117,9 +124,9 @@ namespace Metr.Classes
                     Param = d.Param,
                     Note = note.Split(':')[0],
 
-                    Defect = note.Contains("^def^") ? true : false,
-                    Delete = note.Contains("^del^") ? true : false,
-                    PPR = !note.Contains("^noPPR^") ? true : false
+                    Defect = note.Contains("^def^") ? V : false,
+                    Delete = note.Contains("^del^") ? V : false,
+                    PPR = !note.Contains("^noPPR^") ? V : false
                 });
                 //При ExpDate не null рассчитывает месяца ППР
                 if (deviceList.Last().ExpDate != null)
@@ -255,16 +262,45 @@ namespace Metr.Classes
                     DateTime.Compare(d.pprDate4.Value, searchEnd) <= 0
                     ).ToList() : deviceListPPR;
             }
-                
 
-            deviceListPPR = pprDate ? deviceListPPR.Where(d =>
+            deviceListPPR.OrderBy(d => d.ExpDate);
+
+            if (pprDate)
+            {
+                deviceListPPR = deviceListPPR.Where(d =>
                 (d.pprDate1.Value.Month == DateTime.Now.Month) ||
                 (d.pprDate2.Value.Month == DateTime.Now.Month) ||
                 (d.pprDate3.Value.Month == DateTime.Now.Month) ||
                 (d.pprDate4.Value.Month == DateTime.Now.Month)
-                ).ToList() : deviceListPPR;
+                ).ToList();
+                
+                List<int> WorkingDays = new List<int>();
+                List<int> DeviceDays = new List<int>();
 
-            deviceListPPR.OrderBy(d => d.ExpDate);
+                int NowDaysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+                DayOfWeek dayOfWeek;
+
+                for (int i = 1; i <= NowDaysInMonth; i++)
+                {
+                    dayOfWeek = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i).DayOfWeek;
+                    if (dayOfWeek != DayOfWeek.Sunday && dayOfWeek != DayOfWeek.Saturday)
+                    {
+                        WorkingDays.Add(i);
+                    }
+                }
+
+                int DayInterval = (int)Math.Ceiling((double)deviceListPPR.Count / (double)WorkingDays.Count);
+                foreach (int d in WorkingDays)
+                    for (int i = 0; i < DayInterval; i++) DeviceDays.Add(d);
+
+                for (int i = 0; i < deviceListPPR.Count; i++)
+                {
+                    deviceListPPR[i].pprMonthDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DeviceDays[i]);
+                }
+
+                deviceListPPR.OrderBy(d => d.ObjectName);
+            }           
 
             if (Def)
                 deviceListMain = deviceListMain.Where(d =>
@@ -284,6 +320,7 @@ namespace Metr.Classes
                 !d.Delete
                 ).ToList();
 
+            deviceListMain = deviceListMain.OrderBy(d => d.ExpDate).ToList();
             infoMain = "Приборы:" + deviceListMain.Count + " из " + total + (Exp ? "\n" + expInfo:"");
             infoPPR = "Приборы: " + deviceListPPR.Count() + infoPPR;
             infoExc = "Приборы: " + deviceListExc.Count() + infoExc;
@@ -423,9 +460,9 @@ namespace Metr.Classes
 
             if (PPR != null)
             {                    
-                log += tags.Contains("^noPPR^") && PPR == true ? "\n>ППР: Включён\n" : !tags.Contains("^noPPR^") && PPR == false ? "\nППР: Исключён\n" : "";
+                log += tags.Contains("^noPPR^") && PPR == V ? "\n>ППР: Включён\n" : !tags.Contains("^noPPR^") && PPR == false ? "\nППР: Исключён\n" : "";
                                         
-                tags = tags.Contains("^noPPR^") && PPR == true ? tags.Replace("^noPPR^", "") : !tags.Contains("^noPPR^") && PPR == false ? tags + "^noPPR^" : tags + "";
+                tags = tags.Contains("^noPPR^") && PPR == V ? tags.Replace("^noPPR^", "") : !tags.Contains("^noPPR^") && PPR == false ? tags + "^noPPR^" : tags + "";
             }
 
 
@@ -563,23 +600,51 @@ namespace Metr.Classes
             }
         }
 
-        //Далее методы печати
-
-        public static void StartExcelExport(MetrBaseEntities context)
+        public static string DevString (List<int> Field, DeviceData device)
         {
-
-            Thread thread = new Thread(()=>ExcelExport(context));
-            thread.IsBackground = true;           
-            thread.Start();
+            string rString = "";
+            foreach (int field in Field)
+            {
+                //"Пусто"
+                //"Порядковый номер"
+                //"Название прибора" />
+                //"Заводской номер" />
+                //"Объект" />
+                //"Измеряемый параметр" />
+                //"Единицы измерения" />
+                //"МП (Срок годности)" />
+                //"ППР (Только текущий месяц)" />
+                //"МП/ППР 1" />
+                //"ППР 1" />
+                //"ППР 2" />
+                //"ППР 3" />
+                //"ППР 4" />
+                //"Период ППР" />
+                //"Примечания" />
+                switch (field)
+                {
+                    case 0: rString += "\t"; break;
+                    case 1: rString+= device.ID + "\t"; break;
+                    case 2: rString+= device.Name + "\t"; break;
+                    case 3: rString+= device.FNum + "\t"; break;
+                    case 4: rString+= device.ObjectName + "\t"; break;
+                    case 5: rString+= device.Param + "\t"; break;
+                    case 6: rString+= device.MetrData + "\t"; break;
+                    case 7: rString+= device.ExpDate!=null?device.ExpDate.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 8: rString+= device.pprMonthDate != null?device.pprMonthDate.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 9: rString+= device.ExpDate!=null&&device.pprDate1!=null?device.ExpDate.Value.ToString("dd.MM.yyyy") + "/\n" + device.pprDate1.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 10: rString+= device.pprDate1 != null?device.pprDate1.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 11: rString+= device.pprDate2 != null?device.pprDate2.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 12: rString+= device.pprDate3 != null?device.pprDate3.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 13: rString+= device.pprDate4 != null?device.pprDate4.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
+                    case 14:rString += device.Period + "\t"; break;
+                    case 15:rString += device.Note + "\t"; break;
+                    default: break;
+                }
+            }
+            rString.Trim('\t');
+            return rString;
         }
-
-        public static void ExcelExport(MetrBaseEntities context)
-        {
-            
-        }
-
-
-
     }
     
 }
