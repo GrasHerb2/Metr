@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Windows;
 using System.Text.Json;
+using System.Windows.Threading;
 
 namespace Metr.Classes
 {
@@ -123,7 +124,7 @@ namespace Metr.Classes
             devs = devs.OrderByDescending(x => x.ObjectName).ThenBy(x => x.Name).ThenBy(x => x.ExpDate).ToList();
             if (settings.Field.Contains(8)) devs = devs.OrderBy(x => x.pprMonthDate).ToList();
 
-
+            string save = "";
 
             if (saveFileDialog.ShowDialog().Value)
             {
@@ -136,7 +137,7 @@ namespace Metr.Classes
                         foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
                         {
 
-                            string save = Path.GetDirectoryName(saveFileDialog.FileName) + "\\import\\";
+                            save = Path.GetDirectoryName(saveFileDialog.FileName) + "\\import\\";
                             Directory.CreateDirectory(save);
 
                             string fName = devices[0].ObjectName;
@@ -245,6 +246,7 @@ namespace Metr.Classes
                     ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName);
                     ExcelApp.Quit();
                 }
+                
             }
         }
     }

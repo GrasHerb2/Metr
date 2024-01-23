@@ -68,7 +68,7 @@ namespace Metr._Windows
                 localSettings.Settings = new List<int> { SearchUseChB.IsChecked.Value ? 1 : 0, OriginTableCmB.SelectedIndex, ObjSortChB.IsChecked.Value ? 1 : 0 };
                 Thread thread = new Thread(() => EClass.ExportExcel(localSettings)) { IsBackground = true };
                 thread.IsBackground = true;
-                thread.Start();
+                thread.Start();                
             }
             catch (Exception ex)
             {
