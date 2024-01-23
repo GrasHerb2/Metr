@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using System.Windows;
+using System.Text.Json;
 
 namespace Metr.Classes
 {
@@ -93,8 +95,9 @@ namespace Metr.Classes
 
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Excel files (*.xls or .xlsx)|.xls;*.xlsx";
-            bool save = saveFileDialog.ShowDialog().Value;
+            saveFileDialog.Filter = "Excel (*.xls or *.xlsx)|*.xls;*.xlsx|Txt|*.txt|Json|*.json";
+
+
 
             List<DeviceData> devs = new List<DeviceData>();
 
@@ -117,70 +120,132 @@ namespace Metr.Classes
             }
 
 
-            devs = devs.OrderByDescending(x => x.ObjectName).ThenBy(x=>x.Name).ThenBy(x=>x.ExpDate).ToList();
+            devs = devs.OrderByDescending(x => x.ObjectName).ThenBy(x => x.Name).ThenBy(x => x.ExpDate).ToList();
             if (settings.Field.Contains(8)) devs = devs.OrderBy(x => x.pprMonthDate).ToList();
 
-            Application ExcelApp = new Application();
-            ExcelApp.Visible = false;
-            ExcelApp.DisplayAlerts = false;
-
-            Workbook book = ExcelApp.Workbooks.Add();
 
 
-            string exportString = "";
-
-            Worksheet sheet;
-
-            if (settings.Settings[2] == 1)
+            if (saveFileDialog.ShowDialog().Value)
             {
-                foreach(List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp=>grp.ToList()))
+                if (saveFileDialog.FileName.Contains(".txt"))
                 {
-                    sheet = book.Worksheets.Add();
-                    sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
+                    
 
-                    for (int h = 0; h<settings.CHeader.Count; h++)
+                    if (settings.Settings[2] == 1)
                     {
-                        sheet.Cells[1,h+1].Value2 = settings.CHeader[h];
-                    }
-
-                    for (int i = 0; i < devices.Count; i++)
-                    {
-                        exportString = DeviceData.DevString(settings.Field, devices[i]);
-                        for (int j =0; j<exportString.Split('\t').Count(); j++)
+                        foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
                         {
-                            sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
-                            sheet.Cells[i + 2, j + 1].Style.WrapText = true;
+
+                            string save = Path.GetDirectoryName(saveFileDialog.FileName) + "\\import\\";
+                            Directory.CreateDirectory(save);
+
+                            string fName = devices[0].ObjectName;
+
+                            string content = "";
+
+                            for (int h = 0; h < settings.CHeader.Count; h++)
+                            {
+                                content = settings.CHeader[h];
+                            }
+
+                            content += "\n";
+
+                            for (int i = 0; i < devices.Count; i++)
+                            {
+                                content += DeviceData.DevString(settings.Field, devices[i]);
+                                content += "\n";
+                            }
+
+                            File.WriteAllText(save+fName+".txt", content);
                         }
                     }
-                    
-                    
-                }
-            }
-            else
-            {
-                sheet = book.Worksheets.Add();
-                for (int h = 0; h < settings.CHeader.Count; h++)
-                {
-                    sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
-                }
-
-                for (int i = 0; i < devs.Count; i++)
-                {
-                    exportString = DeviceData.DevString(settings.Field, devs[i]);
-                    for (int j = 0; j < exportString.Split('\t').Count(); j++)
+                    else
                     {
-                        sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
+
+
+                        string content = "";
+                        for (int h = 0; h < settings.CHeader.Count; h++)
+                        {
+                            content = settings.CHeader[h];
+                        }
+
+                        for (int i = 0; i < devs.Count; i++)
+                        {
+                            content += DeviceData.DevString(settings.Field, devs[i]);
+                            content += "\n";
+                        }
+                        File.WriteAllText(saveFileDialog.FileName, content);
                     }
                 }
+
+                if (saveFileDialog.FileName.Contains(".json"))
+                {
+                    string text = JsonSerializer.Serialize(devs);
+                    File.WriteAllText(saveFileDialog.FileName, text);
+                }
+
+                if (saveFileDialog.FileName.Contains(".xls") || saveFileDialog.FileName.Contains(".xlsx"))
+                {
+
+                    Microsoft.Office.Interop.Excel.Application ExcelApp = new Microsoft.Office.Interop.Excel.Application();
+                    ExcelApp.Visible = false;
+                    ExcelApp.DisplayAlerts = false;
+
+                    Workbook book = ExcelApp.Workbooks.Add();
+
+
+                    string exportString = "";
+
+                    Worksheet sheet;
+
+                    if (settings.Settings[2] == 1)
+                    {
+                        foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
+                        {
+                            sheet = book.Worksheets.Add();
+                            sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
+
+                            for (int h = 0; h < settings.CHeader.Count; h++)
+                            {
+                                sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
+                            }
+
+                            for (int i = 0; i < devices.Count; i++)
+                            {
+                                exportString = DeviceData.DevString(settings.Field, devices[i]);
+                                for (int j = 0; j < exportString.Split('\t').Count(); j++)
+                                {
+                                    sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
+                                    sheet.Cells[i + 2, j + 1].Style.WrapText = true;
+                                }
+                            }
+
+
+                        }
+                    }
+                    else
+                    {
+                        sheet = book.Worksheets.Add();
+                        for (int h = 0; h < settings.CHeader.Count; h++)
+                        {
+                            sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
+                        }
+
+                        for (int i = 0; i < devs.Count; i++)
+                        {
+                            exportString = DeviceData.DevString(settings.Field, devs[i]);
+                            for (int j = 0; j < exportString.Split('\t').Count(); j++)
+                            {
+                                sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
+                            }
+                        }
+                    }
+
+
+                    ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName);
+                    ExcelApp.Quit();
+                }
             }
-
-
-            ExcelApp.Application.ActiveWorkbook.SaveAs(
-                save?
-                saveFileDialog.FileName
-                 : "\\table.xls");
-            ExcelApp.Quit();
-
         }
     }
 }
