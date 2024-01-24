@@ -145,8 +145,8 @@
           <Property Name="IDObject" Type="Int32" Nullable="false" />
           <Property Name="Param" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ExpDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Object" Relationship="Self.FK_Device_Object" FromRole="Device" ToRole="Object" />
           <Property Name="NoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Object" Relationship="Self.FK_Device_Object" FromRole="Device" ToRole="Object" />
         </EntityType>
         <EntityType Name="Object">
           <Key>
@@ -182,10 +182,10 @@
           <Property Name="RoleID" Type="Int32" Nullable="false" />
           <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ULogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UPass" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Actions" Relationship="Self.FK_Actions_User" FromRole="User" ToRole="Actions" />
           <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
-          <Property Name="ULogin" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UPass" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Actions_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -242,8 +242,8 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
-          </EntityContainer>
-        </Schema>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -263,7 +263,6 @@
           <EntitySetMapping Name="Device">
             <EntityTypeMapping TypeName="MetrBaseModel.Device">
               <MappingFragment StoreEntitySet="Device">
-                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
                 <ScalarProperty Name="Device_ID" ColumnName="Device_ID" />
                 <ScalarProperty Name="FNum" ColumnName="FNum" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -271,6 +270,7 @@
                 <ScalarProperty Name="IDObject" ColumnName="IDObject" />
                 <ScalarProperty Name="Param" ColumnName="Param" />
                 <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -304,16 +304,16 @@
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="MetrBaseModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="UPass" ColumnName="UPass" />
-                <ScalarProperty Name="ULogin" ColumnName="ULogin" />
                 <ScalarProperty Name="User_ID" ColumnName="User_ID" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ULogin" ColumnName="ULogin" />
+                <ScalarProperty Name="UPass" ColumnName="UPass" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

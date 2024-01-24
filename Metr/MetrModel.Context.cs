@@ -19,7 +19,6 @@ namespace Metr
             : base("name=MetrBaseEntities")
         {
         }
-
         private static MetrBaseEntities context;
 
         public static MetrBaseEntities GetContext(bool Update = false)
@@ -27,7 +26,6 @@ namespace Metr
             if (context == null || Update) context = new MetrBaseEntities();
             return context;
         }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

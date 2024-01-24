@@ -83,41 +83,51 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Actions.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>MetrModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\EClass.cs" />
+    <Compile Include="Device.cs">
+      <DependentUpon>MetrModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MetrModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MetrModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MetrModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MetrModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MetrModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MetrModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Object.cs">
+      <DependentUpon>MetrModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Role.cs">
+      <DependentUpon>MetrModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
+      <DependentUpon>MetrModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>MetrModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="_Windows\ActionsWindow.xaml.cs">
       <DependentUpon>ActionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\UControl.cs" />
-    <Compile Include="Device.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="_Windows\DeviceWin.xaml.cs">
       <DependentUpon>DeviceWin.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Object.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="_Windows\ExcelExportWindow.xaml.cs">
       <DependentUpon>ExcelExportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="_Windows\RegWindow.xaml.cs">
       <DependentUpon>RegWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Role.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagrams.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="_Windows\UserActivate.xaml.cs">
       <DependentUpon>UserActivate.xaml</DependentUpon>
@@ -176,16 +186,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -203,12 +203,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="Model1.edmx">
+    <EntityDeploy Include="MetrModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>MetrModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <None Include="MetrModel.edmx.diagram">
+      <DependentUpon>MetrModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -218,18 +218,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
-    <Content Include="Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -274,6 +262,18 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MetrModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MetrModel.edmx</DependentUpon>
+      <LastGenOutput>MetrModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="MetrModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MetrModel.edmx</DependentUpon>
+      <LastGenOutput>MetrModel.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,17 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="84506de055604113b2bf8cafd068b997" Name="Diagram1">
-        <EntityTypeShape EntityType="MetrBaseModel.Actions" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
+      <Diagram DiagramId="619327781eda474c8ba9bb153994a000" Name="Diagram1">
+        <EntityTypeShape EntityType="MetrBaseModel.Actions" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MetrBaseModel.Device" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="MetrBaseModel.Object" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetrBaseModel.Role" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetrBaseModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetrBaseModel.User" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetrBaseModel.Role" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetrBaseModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetrBaseModel.User" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="MetrBaseModel.FK_Actions_User" ManuallyRouted="false" />
         <AssociationConnector Association="MetrBaseModel.FK_Device_Object" ManuallyRouted="false" />
         <AssociationConnector Association="MetrBaseModel.FK_User_Role" ManuallyRouted="false" />
-        </Diagram>
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
