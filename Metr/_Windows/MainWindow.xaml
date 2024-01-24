@@ -10,7 +10,7 @@
         <StackPanel>
             <Menu Background="Transparent">
                 <MenuItem Header="Доп. функции">
-                    <MenuItem Header="Экспорт" x:Name="printBtn" Click="printBtn_Click"/>
+                    <MenuItem Header="Экспорт" x:Name="expBtn" Click="expBtn_Click"/>
                     <Separator/>
                     <MenuItem Header="Пользователи" x:Name="userBtn" Click="userBtn_Click"/>
                     <MenuItem Header="Журнал действий" x:Name="journalBtn" Click="journalBtn_Click"/>

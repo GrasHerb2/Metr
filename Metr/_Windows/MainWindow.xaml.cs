@@ -354,12 +354,6 @@ namespace Metr
             DatePickers.IsEnabled = !dateChB.IsChecked.Value;
         }
 
-        private void printBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ExcelExportWindow excelExport = new ExcelExportWindow();
-            excelExport.ShowDialog();
-        }
-
         private void userBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -519,6 +513,12 @@ namespace Metr
             {
                 searchTBObj.Text = "";
             }
+        }
+
+        private void expBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ExcelExportWindow excelExport = new ExcelExportWindow();
+            excelExport.ShowDialog();
         }
     }
 }
