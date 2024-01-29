@@ -1,35 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 using System.Windows;
-using System.Xml.Linq;
-using System.Windows.Controls;
-using System.Security.AccessControl;
-using System.Security.Cryptography;
-using System.Reflection;
-using System.Diagnostics.Tracing;
-using System.Diagnostics.Eventing.Reader;
-using System.Threading;
-using Metr.Properties;
 
 namespace Metr.Classes
 {
 
     internal class DeviceData
     {
-        
+
         public int ID { get; set; }
         public string FNum { get; set; }
         public string Name { get; set; }
         public string MetrData { get; set; }
         public int ObjectID { get; set; }
         public string ObjectName { get; set; }
-        public string Param { get; set; }        
-        public string Note { get; set; }        
+        public string Param { get; set; }
+        public string Note { get; set; }
         public string updateDate { get; set; }
         public DateTime? ExpDate { get; set; }
         public DateTime? pprDate1 { get; set; }
@@ -99,9 +86,6 @@ namespace Metr.Classes
         /// </summary>
         /// <param name="pprYear">Если 0, приравнивается к текущему году. По умолчанию = 0 (выбирает год текущей даты)</param>
         /// <returns>Возвращает deviceList содержащий все приборы в БД</returns>
-        
-        
-        
         public static List<DeviceData> dataUpdate(int pprYear = 0)
         {
             devices = MetrBaseEntities.GetContext().Device.ToList();
@@ -141,8 +125,8 @@ namespace Metr.Classes
             infoMain = "Приборы:" + deviceList.Count + " из " + devices.Count();
 
             //Здесь для заполнения листов выводящихся в таблицы
-            Search(new List<string>() { "",""}, new List<string>() { }, DateTime.MinValue, DateTime.MaxValue, false, false);            
-            
+            Search(new List<string>() { "", "" }, new List<string>() { }, DateTime.MinValue, DateTime.MaxValue, false, false);
+
             return deviceList;
         }
         /// <summary>
@@ -160,7 +144,7 @@ namespace Metr.Classes
         public static List<DeviceData> Search(List<string> dSearch, List<string> objects, DateTime searchStart, DateTime searchEnd, bool Def, bool Del, bool pprDate = false, bool Exp = false)
         {
             deviceListMain = deviceList;
-                int total = deviceList.Count;
+            int total = deviceList.Count;
 
             deviceListExc = deviceListMain.Where(d =>
                 d.Defect || d.Delete
@@ -186,12 +170,12 @@ namespace Metr.Classes
                     d.FNum == dSearch[0]
                     ).ToList();
             }
-                             
+
 
             if (objects.Count != 0)
             {
                 deviceListMain = deviceListMain.Where(d =>
-                objects.Any(a=> a == d.ObjectName)
+                objects.Any(a => a == d.ObjectName)
                 ).ToList();
 
                 deviceListPPR = deviceListPPR.Where(d =>
@@ -229,11 +213,11 @@ namespace Metr.Classes
             //Конец поиска исключённых
 
 
-            
 
-            
 
-            
+
+
+
 
             if (searchStart != new DateTime())
             {
@@ -273,7 +257,7 @@ namespace Metr.Classes
                 (d.pprDate3.Value.Month == DateTime.Now.Month) ||
                 (d.pprDate4.Value.Month == DateTime.Now.Month)
                 ).ToList();
-                
+
                 List<int> WorkingDays = new List<int>();
                 List<int> DeviceDays = new List<int>();
 
@@ -300,7 +284,7 @@ namespace Metr.Classes
                 }
 
                 deviceListPPR.OrderBy(d => d.ObjectName);
-            }           
+            }
 
             if (Def)
                 deviceListMain = deviceListMain.Where(d =>
@@ -321,15 +305,15 @@ namespace Metr.Classes
                 ).ToList();
 
             deviceListMain = deviceListMain.OrderBy(d => d.ExpDate).ToList();
-            infoMain = "Приборы:" + deviceListMain.Count + " из " + total + (Exp ? "\n" + expInfo:"");
+            infoMain = "Приборы:" + deviceListMain.Count + " из " + total + (Exp ? "\n" + expInfo : "");
             infoPPR = "Приборы: " + deviceListPPR.Count() + infoPPR;
             infoExc = "Приборы: " + deviceListExc.Count() + infoExc;
 
-            
+
             deviceListMain = Exp ? deviceListMain.OrderByDescending(d => d.Stroke).ToList() : deviceListMain;
 
             return deviceListMain;
-            
+
         }
         /// <summary>
         /// Метод добавления нового прибора
@@ -345,13 +329,13 @@ namespace Metr.Classes
         /// <param name="PPR">Отслеживание ППР </param>
         /// <param name="user">Пользоваетль добавляющий прибор</param>
         /// <returns>Возвращает MessageBoxResult где: Yes - добавление подтверждено, No - добавление отмененно пользователем, Cancel - добавление отменено по иным причинам, None - добавление отменено системой</returns>
-        public static MessageBoxResult NewDevice(string Name, string ObjectName, string FNum, string Param, string MetrData, DateTime? ExpDate, string Period, string NoteText, bool PPR, int user )
+        public static MessageBoxResult NewDevice(string Name, string ObjectName, string FNum, string Param, string MetrData, DateTime? ExpDate, string Period, string NoteText, bool PPR, int user)
         {
             MetrBaseEntities context = MetrBaseEntities.GetContext();
 
             actions.Clear();
 
-            string tags = (!PPR ? "^noPPR^" : "") + (Period != "" ? "^per+"+Period+"^" : "");
+            string tags = (!PPR ? "^noPPR^" : "") + (Period != "" ? "^per+" + Period + "^" : "");
 
             string log = "";
 
@@ -369,7 +353,7 @@ namespace Metr.Classes
                 }
                 else
                     return MessageBoxResult.Cancel;
-
+            if (FNum + "" == "") FNum = "Н/Д";
 
             log = "Номер:" + FNum + "\nНазвание:" + Name + "\nИзмеряемый параметр:" + Param + "\nЕдиницы измерения:" + MetrData + "\nОбъект:" + ObjectName + "\nСрок годности:" + ExpDate + "\nДоп. информация:" + NoteText;
 
@@ -459,30 +443,31 @@ namespace Metr.Classes
                     : tags;
 
             if (PPR != null)
-            {                    
+            {
                 log += tags.Contains("^noPPR^") && PPR == V ? "\n>ППР: Включён\n" : !tags.Contains("^noPPR^") && PPR == false ? "\nППР: Исключён\n" : "";
-                                        
+
                 tags = tags.Contains("^noPPR^") && PPR == V ? tags.Replace("^noPPR^", "") : !tags.Contains("^noPPR^") && PPR == false ? tags + "^noPPR^" : tags + "";
             }
 
+            if (FNum + "" == "") FNum = "Н/Д";
 
             log +=
                 (Name + "" != dev.Name.ToString() + "" && !(string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(dev.Name)) ? ">Название\n" + dev.Name + "->" + Name + "\n" : "") +
 
                 (FNum + "" != dev.FNum + "" && !(string.IsNullOrEmpty(FNum) && string.IsNullOrEmpty(dev.FNum)) ? ">Номер\n" + dev.FNum + "->" + FNum + "\n" : "") +
-                
+
                 (ObjectName + "" != dev.Object.Name + "" && !(string.IsNullOrEmpty(ObjectName) && string.IsNullOrEmpty(dev.Object.Name)) ? ">Объект\n" + dev.Object.Name + "->" + ObjectName : "") +
-                
+
                 (Param + "" != dev.Param + "" && !(string.IsNullOrEmpty(Param) && string.IsNullOrEmpty(dev.Param)) ? ">Измеряемый параметр\n" + dev.Param + "->" + Param + "\n" : "") +
-                
+
                 (MetrData + "" != dev.MetrData + "" && !(string.IsNullOrEmpty(MetrData) && string.IsNullOrEmpty(dev.MetrData)) ? ">Единицы измерения\n" + dev.MetrData + "->" + MetrData + "\n" : "") +
-                
-                (NoteText+"" != (dev.NoteText + "").Split(':')[0]  && !(string.IsNullOrEmpty(NoteText) && string.IsNullOrEmpty(dev.NoteText)) ? ">Примечание\n" + dev.NoteText.Split(':')[0] + "" + "->" + NoteText + "\n" : "") +
-                
-                (ExpDate.ToString() + "" != dev.ExpDate.ToString() + "" && 
+
+                (NoteText + "" != (dev.NoteText + "").Split(':')[0] && !(string.IsNullOrEmpty(NoteText) && string.IsNullOrEmpty(dev.NoteText)) ? ">Примечание\n" + dev.NoteText.Split(':')[0] + "" + "->" + NoteText + "\n" : "") +
+
+                (ExpDate.ToString() + "" != dev.ExpDate.ToString() + "" &&
                 !(string.IsNullOrEmpty(ExpDate.ToString()) && string.IsNullOrEmpty(dev.ExpDate.ToString())) ?
 
-                "Срок годности\n" + dev.ExpDate + "->" + ExpDate 
+                "Срок годности\n" + dev.ExpDate + "->" + ExpDate
                 : "") +
 
                 "\n"
@@ -503,10 +488,10 @@ namespace Metr.Classes
                     dev.Param = Param;
                     dev.IDObject = context.Object.Where(o => o.Name == ObjectName).FirstOrDefault().Object_ID;
 
-                    actions.Add(new Actions() { UserID = user, ActionDate = DateTime.Now, ActionText = "Изменение прибора " + dev.Name + "\n" +log, ComputerName = Environment.MachineName });
+                    actions.Add(new Actions() { UserID = user, ActionDate = DateTime.Now, ActionText = "Изменение прибора " + dev.Name + "\n" + log, ComputerName = Environment.MachineName });
 
                     context.Actions.AddRange(actions);
-                    
+
                     context.SaveChanges();
                     return MessageBoxResult.Yes;
                 case MessageBoxResult.No:
@@ -536,22 +521,22 @@ namespace Metr.Classes
                             MessageBox.Show(d.Name + " " + d.FNum + " уже удалён, для восстановления необходимо перейти во вкладку 'Исключённые'", "Удаление", MessageBoxButton.OK, MessageBoxImage.Information);
                         else
                         {
-                            devstring +="\n"+d.Name + " " + d.FNum;
+                            devstring += "\n" + d.Name + " " + d.FNum;
                             devs.Add(d);
                         }
-                    }        
+                    }
                     else
                     {
                         devstring += "\n" + d.Name + " " + d.FNum;
                         devs.Add(d);
                     }
                 }
-                
-                if (MessageBox.Show("Будут исключены из списка следующие приборы:"+devstring+"\nПрименить?\n Данные приборы можно будет найти и восстановить на вкладке 'Исключённые'.","Удаление",MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
+
+                if (MessageBox.Show("Будут исключены из списка следующие приборы:" + devstring + "\nПрименить?\n Данные приборы можно будет найти и восстановить на вкладке 'Исключённые'.", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    foreach(Device d in devs)
+                    foreach (Device d in devs)
                     {
-                        d.NoteText = string.IsNullOrEmpty(d.NoteText) ? ":^del^" : d.NoteText.Contains(':') ? d.NoteText + "^del^": d.NoteText+":^del^";
+                        d.NoteText = string.IsNullOrEmpty(d.NoteText) ? ":^del^" : d.NoteText.Contains(':') ? d.NoteText + "^del^" : d.NoteText + ":^del^";
                         d.NoteText = d.NoteText.Insert(d.NoteText.IndexOf(':'), " \n'Исключён " + DateTime.Now.ToShortDateString() + "'");
                         context.Actions.Add(new Actions() { UserID = user, ActionDate = DateTime.Now, ActionText = "Исключение прибора " + d.Name + " " + d.FNum, ComputerName = Environment.MachineName });
                     }
@@ -577,9 +562,9 @@ namespace Metr.Classes
             if (devices.Count() != 0)
             {
                 foreach (Device d in devices)
-                {                   
-                            devstring += "\n" + d.Name + " " + d.FNum;
-                            devs.Add(d);
+                {
+                    devstring += "\n" + d.Name + " " + d.FNum;
+                    devs.Add(d);
                 }
                 if (MessageBox.Show("Будут восстановлены следующие приборы:" + devstring + "\nПрименить?\n Данные приборы возвращены на вкладку 'Приборы'.", "Восстановление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
@@ -600,7 +585,7 @@ namespace Metr.Classes
             }
         }
 
-        public static string DevString (List<int> Field, DeviceData device)
+        public static string DevString(List<int> Field, DeviceData device)
         {
             string rString = "";
             foreach (int field in Field)
@@ -624,21 +609,21 @@ namespace Metr.Classes
                 switch (field)
                 {
                     case 0: rString += "\t"; break;
-                    case 1: rString+= device.ID + "\t"; break;
-                    case 2: rString+= device.Name + "\t"; break;
-                    case 3: rString+= device.FNum + "\t"; break;
-                    case 4: rString+= device.ObjectName + "\t"; break;
-                    case 5: rString+= device.Param + "\t"; break;
-                    case 6: rString+= device.MetrData + "\t"; break;
-                    case 7: rString+= device.ExpDate!=null?device.ExpDate.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 8: rString+= device.pprMonthDate != null?device.pprMonthDate.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 9: rString+= device.ExpDate!=null&&device.pprDate1!=null?device.ExpDate.Value.ToString("dd.MM.yyyy") + "/\n" + device.pprDate1.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 10: rString+= device.pprDate1 != null?device.pprDate1.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 11: rString+= device.pprDate2 != null?device.pprDate2.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 12: rString+= device.pprDate3 != null?device.pprDate3.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 13: rString+= device.pprDate4 != null?device.pprDate4.Value.ToString("dd.MM.yyyy") + "\t" :""; break;
-                    case 14:rString += device.Period + "\t"; break;
-                    case 15:rString += device.Note + "\t"; break;
+                    case 1: rString += device.ID + "\t"; break;
+                    case 2: rString += device.Name + "\t"; break;
+                    case 3: rString += device.FNum + "\t"; break;
+                    case 4: rString += device.ObjectName + "\t"; break;
+                    case 5: rString += device.Param + "\t"; break;
+                    case 6: rString += device.MetrData + "\t"; break;
+                    case 7: rString += device.ExpDate != null ? device.ExpDate.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 8: rString += device.pprMonthDate != null ? device.pprMonthDate.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 9: rString += device.ExpDate != null && device.pprDate1 != null ? device.ExpDate.Value.ToString("dd.MM.yyyy") + "/\n" + device.pprDate1.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 10: rString += device.pprDate1 != null ? device.pprDate1.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 11: rString += device.pprDate2 != null ? device.pprDate2.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 12: rString += device.pprDate3 != null ? device.pprDate3.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 13: rString += device.pprDate4 != null ? device.pprDate4.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
+                    case 14: rString += device.Period + "\t"; break;
+                    case 15: rString += device.Note + "\t"; break;
                     default: break;
                 }
             }
@@ -646,5 +631,5 @@ namespace Metr.Classes
             return rString;
         }
     }
-    
+
 }

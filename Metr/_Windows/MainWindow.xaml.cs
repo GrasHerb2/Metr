@@ -2,21 +2,11 @@
 using Metr.Classes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Metr
 {
@@ -84,8 +74,6 @@ namespace Metr
 
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    pBar.Visibility = Visibility.Visible;
-
                     BottomUpdate();
 
                     deviceGrid.ItemsSource = null;
@@ -105,7 +93,7 @@ namespace Metr
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message.ToString() + "\n" + ex.InnerException.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     pBar.Value = 0;
                     pBar.Visibility = Visibility.Collapsed;
                 }));
@@ -125,7 +113,7 @@ namespace Metr
                     Exp = expChB.IsChecked.Value;
                     searchStart = expDateStart.SelectedDate != null ? expDateStart.SelectedDate : DateTime.MinValue;
                     searchEnd = expDateEnd.SelectedDate != null ? expDateEnd.SelectedDate : DateTime.MaxValue;
-                    dSearch = new List<string>() { searchTBNum.Text, searchTBName.Text};
+                    dSearch = new List<string>() { searchTBNum.Text, searchTBName.Text };
                 }));
 
                 DeviceData.Search(dSearch, objects, searchStart.Value, searchEnd.Value, searchDef, searchDel, pprDate, Exp);
@@ -379,7 +367,7 @@ namespace Metr
 
         private void infoBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Metr - программа предназначенная для ведения журнала приборов, отслеживания их срока годности и составления журнала ППР.\nРазработчик: Асонов Г.С.", "О программе", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Metr 2901 - программа предназначенная для ведения журнала приборов, отслеживания их срока годности и составления журнала ППР.\nРазработчик: Асонов Г.С.", "О программе", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void signOutBtn_Click(object sender, RoutedEventArgs e)
@@ -416,25 +404,13 @@ namespace Metr
             {
                 if (User.RoleID >= 2)
                 {
-                    int index = ((DeviceData)pprGrid.SelectedItem).ID;
-                    DeviceWin newDevice = new DeviceWin(false, index) { User = this.User };
-                    newDevice.ShowDialog();
-                    switch (newDevice.DialogResult)
-                    {
-                        case true:
-                            MessageBox.Show("Сохранено!", "Изменение", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
-                        case false:
-                            MessageBox.Show("Изменение отменено", "Изменение", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
-                        default:
-
-                            break;
-                    }
+                    DeviceData device = e.Row.Item as DeviceData;
+                    Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
+                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);
+                    Thread thread = new Thread(UpdateTabs) { IsBackground = true };
+                    thread.Start();
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
-                Thread thread = new Thread(UpdateTabs) { IsBackground = true };
-                thread.Start();
             }
             catch (Exception ex)
             {
@@ -448,25 +424,13 @@ namespace Metr
             {
                 if (User.RoleID >= 2)
                 {
-                    int index = ((DeviceData)excGrid.SelectedItem).ID;
-                    DeviceWin newDevice = new DeviceWin(false, index) { User = this.User };
-                    newDevice.ShowDialog();
-                    switch (newDevice.DialogResult)
-                    {
-                        case true:
-                            MessageBox.Show("Сохранено!", "Изменение", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
-                        case false:
-                            MessageBox.Show("Изменение отменено", "Изменение", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
-                        default:
-
-                            break;
-                    }
+                    DeviceData device = e.Row.Item as DeviceData;
+                    Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
+                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);
+                    Thread thread = new Thread(UpdateTabs) { IsBackground = true };
+                    thread.Start();
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
-                Thread thread = new Thread(UpdateTabs) { IsBackground = true };
-                thread.Start();
             }
             catch (Exception ex)
             {
@@ -477,15 +441,15 @@ namespace Metr
 
         private void AddObjBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(!string.IsNullOrEmpty(searchTBObj.Text) && !objects.Contains(searchTBObj.Text))
-            objects.Add(searchTBObj.Text);
+            if (!string.IsNullOrEmpty(searchTBObj.Text) && !objects.Contains(searchTBObj.Text))
+                objects.Add(searchTBObj.Text);
 
             ObjListView.ItemsSource = null;
             ObjListView.ItemsSource = objects;
         }
         private void searchTBObj_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

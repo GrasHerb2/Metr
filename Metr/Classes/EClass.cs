@@ -1,16 +1,10 @@
-﻿using Metr._Windows;
+﻿using Microsoft.Office.Interop.Excel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
-using System.Windows.Controls;
-using Microsoft.Win32;
-using System.Windows;
 using System.Text.Json;
-using System.Windows.Threading;
 
 namespace Metr.Classes
 {
@@ -23,7 +17,7 @@ namespace Metr.Classes
     {
         public string Name { get; set; }
         public List<string> CHeader { get; set; }
-        public List<int> Field { get; set; }        
+        public List<int> Field { get; set; }
         public List<int> Settings { get; set; }
 
         public static List<EClass> Presets { get; set; }
@@ -120,6 +114,15 @@ namespace Metr.Classes
                 case 3: devs = DeviceData.deviceListExc; break;
             }
 
+            if(!settings.Field.Contains(8)  ||
+                !settings.Field.Contains(9) ||
+                !settings.Field.Contains(10) ||
+                !settings.Field.Contains(11) ||
+                !settings.Field.Contains(12) ||
+                !settings.Field.Contains(13))
+            {
+                devs = devs.Where(d => d.FNum != "Н/Д").ToList();
+            }
 
             devs = devs.OrderByDescending(x => x.ObjectName).ThenBy(x => x.Name).ThenBy(x => x.ExpDate).ToList();
             if (settings.Field.Contains(8)) devs = devs.OrderBy(x => x.pprMonthDate).ToList();
@@ -130,7 +133,7 @@ namespace Metr.Classes
             {
                 if (saveFileDialog.FileName.Contains(".txt"))
                 {
-                    
+
 
                     if (settings.Settings[2] == 1)
                     {
@@ -157,7 +160,7 @@ namespace Metr.Classes
                                 content += "\n";
                             }
 
-                            File.WriteAllText(save+fName+".txt", content);
+                            File.WriteAllText(save + fName + ".txt", content);
                         }
                     }
                     else
@@ -246,7 +249,7 @@ namespace Metr.Classes
                     ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName);
                     ExcelApp.Quit();
                 }
-                
+
             }
         }
     }
