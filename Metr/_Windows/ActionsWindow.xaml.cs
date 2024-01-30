@@ -22,7 +22,8 @@ namespace Metr
     {
         List<Actions> actionsList;
         MetrBaseEntities context = MetrBaseEntities.GetContext();
-        public ActionsWindow(int userID = 0)
+        public int userID { get; set; }
+        public ActionsWindow()
         {
             InitializeComponent();
             searchTBFN.ItemsSource = context.User.Where(a=>a.Actions.Count!=0).Select(a=>a.FullName).ToList();

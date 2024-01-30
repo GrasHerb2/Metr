@@ -2,8 +2,11 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 
 namespace Metr.Classes
@@ -90,7 +93,7 @@ namespace Metr.Classes
 
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Excel (*.xls or *.xlsx)|*.xls;*.xlsx|Txt|*.txt|Json|*.json";
+            saveFileDialog.Filter = "Excel (*.xlsx)|*.xlsx|Txt|*.txt|Json|*.json";
 
 
 
@@ -114,7 +117,7 @@ namespace Metr.Classes
                 case 3: devs = DeviceData.deviceListExc; break;
             }
 
-            if(!settings.Field.Contains(8)  ||
+            if (!settings.Field.Contains(8) ||
                 !settings.Field.Contains(9) ||
                 !settings.Field.Contains(10) ||
                 !settings.Field.Contains(11) ||
@@ -188,66 +191,79 @@ namespace Metr.Classes
                     File.WriteAllText(saveFileDialog.FileName, text);
                 }
 
-                if (saveFileDialog.FileName.Contains(".xls") || saveFileDialog.FileName.Contains(".xlsx"))
+                if (saveFileDialog.FileName.Contains(".xlsx"))
                 {
-
-                    Microsoft.Office.Interop.Excel.Application ExcelApp = new Microsoft.Office.Interop.Excel.Application();
-                    ExcelApp.Visible = false;
-                    ExcelApp.DisplayAlerts = false;
-
-                    Workbook book = ExcelApp.Workbooks.Add();
-
-
-                    string exportString = "";
-
-                    Worksheet sheet;
-
-                    if (settings.Settings[2] == 1)
+                    Application ExcelApp = null;
+                    Workbook book = null;
+                    Worksheet sheet = null;
+                    try
                     {
-                        foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
+                        ExcelApp = new Application();
+                        ExcelApp.Visible = false;
+                        ExcelApp.DisplayAlerts = false;
+                        
+                        book = ExcelApp.Workbooks.Add();
+
+
+                        string exportString = "";
+
+                        if (settings.Settings[2] == 1)
+                        {
+                            foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
+                            {
+                                sheet = book.Worksheets.Add();
+                                sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
+
+                                for (int h = 0; h < settings.CHeader.Count; h++)
+                                {
+                                    sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
+                                }
+
+                                for (int i = 0; i < devices.Count; i++)
+                                {
+                                    exportString = DeviceData.DevString(settings.Field, devices[i]);
+                                    for (int j = 0; j < exportString.Split('\t').Count(); j++)
+                                    {
+                                        sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
+                                        sheet.Cells[i + 2, j + 1].Style.WrapText = true;
+                                    }
+                                }
+                            }
+                        }
+                        else
                         {
                             sheet = book.Worksheets.Add();
-                            sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
-
                             for (int h = 0; h < settings.CHeader.Count; h++)
                             {
                                 sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
                             }
 
-                            for (int i = 0; i < devices.Count; i++)
+                            for (int i = 0; i < devs.Count; i++)
                             {
-                                exportString = DeviceData.DevString(settings.Field, devices[i]);
+                                exportString = DeviceData.DevString(settings.Field, devs[i]);
                                 for (int j = 0; j < exportString.Split('\t').Count(); j++)
                                 {
                                     sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
-                                    sheet.Cells[i + 2, j + 1].Style.WrapText = true;
                                 }
                             }
-
-
                         }
+
+
+                        ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName, Type.Missing);
+                        ExcelApp.Quit();
                     }
-                    else
+                    finally
                     {
-                        sheet = book.Worksheets.Add();
-                        for (int h = 0; h < settings.CHeader.Count; h++)
-                        {
-                            sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
-                        }
+                        var processes = from p in Process.GetProcessesByName("EXCEL")
+                                        select p;
 
-                        for (int i = 0; i < devs.Count; i++)
-                        {
-                            exportString = DeviceData.DevString(settings.Field, devs[i]);
-                            for (int j = 0; j < exportString.Split('\t').Count(); j++)
-                            {
-                                sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
-                            }
+                        foreach (var process in processes)
+                        {                            
+                            if (process.MainWindowTitle == "")
+                                process.Kill();
                         }
                     }
 
-
-                    ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName);
-                    ExcelApp.Quit();
                 }
 
             }

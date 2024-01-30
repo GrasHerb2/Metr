@@ -56,7 +56,7 @@ namespace Metr
                     break;
 
                 case false:
-                    Close();
+                    Application.Current.Shutdown();
                     break;
             }
         }
@@ -174,7 +174,6 @@ namespace Metr
                 MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void addBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -342,13 +341,14 @@ namespace Metr
             DatePickers.IsEnabled = !dateChB.IsChecked.Value;
         }
 
+        UserManagmentWindow umw = new UserManagmentWindow();
         private void userBtn_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (User.RoleID == 3)
                 {
-                    UserManagmentWindow umw = new UserManagmentWindow(User.Id);
+                    umw.User = User.Id;
                     umw.ShowDialog();
                 }
                 else MessageBox.Show("Для данной функции необходимо иметь доступ 'Администратор'");
@@ -358,10 +358,9 @@ namespace Metr
                 MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        ActionsWindow actionsWindow = new ActionsWindow();
         private void journalBtn_Click(object sender, RoutedEventArgs e)
         {
-            ActionsWindow actionsWindow = new ActionsWindow();
             actionsWindow.Show();
         }
 
@@ -397,7 +396,6 @@ namespace Metr
                 MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void pprGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             try
@@ -408,7 +406,7 @@ namespace Metr
                     Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
                     DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);
                     Thread thread = new Thread(UpdateTabs) { IsBackground = true };
-                    thread.Start();
+                    thread.Start();                    
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
             }
@@ -479,10 +477,15 @@ namespace Metr
             }
         }
 
+        ExcelExportWindow excelExport = new ExcelExportWindow();
         private void expBtn_Click(object sender, RoutedEventArgs e)
         {
-            ExcelExportWindow excelExport = new ExcelExportWindow();
             excelExport.ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

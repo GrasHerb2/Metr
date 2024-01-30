@@ -20,12 +20,12 @@ namespace Metr
     /// </summary>
     public partial class UserManagmentWindow : Window
     {
-        int User = 0;
+        public int User { get; set; }
         MetrBaseEntities context;
-        public UserManagmentWindow(int user)
+        List<Actions> register = new List<Actions>();
+        public UserManagmentWindow()
         {
-            InitializeComponent();
-            this.User = user;
+            InitializeComponent();            
             context = MetrBaseEntities.GetContext();
             UControl.UpdateUsers(context);
             UpdateTabs();
@@ -33,8 +33,8 @@ namespace Metr
         void UpdateTabs() 
         {
             UControl.UpdateUsers(context);
-            
-            List<Actions> register = new List<Actions>();
+
+            register.Clear();
 
             foreach (UControl u in UControl.UserDataRegister)
             {
@@ -49,6 +49,7 @@ namespace Metr
             deaUsersTab.Visibility = UControl.UserDataDeactive.Count() != 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        ActionsWindow actionsWindow = new ActionsWindow();
         void uActionsShow()
         {
 
@@ -59,8 +60,7 @@ namespace Metr
             }
 
             UControl user = mainGrid.SelectedItem as UControl;
-
-            ActionsWindow actionsWindow = new ActionsWindow(user.userID);
+            actionsWindow.userID = user.userID;
             actionsWindow.ShowDialog();
         }
         private void userActionsBtn_Click(object sender, RoutedEventArgs e)
@@ -145,7 +145,7 @@ namespace Metr
             }
 
             UControl user = deaGrid.SelectedItem as UControl;
-            ActionsWindow actionsWindow = new ActionsWindow(user.userID);
+            actionsWindow.userID = user.userID;
             actionsWindow.ShowDialog();
         }
         private void deaActions_Click(object sender, RoutedEventArgs e)

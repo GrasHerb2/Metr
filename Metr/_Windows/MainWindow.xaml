@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Metr"
         mc:Ignorable="d"
-        Title="Метр" MinHeight="450" MinWidth="800">
+        Title="Метр" MinHeight="450" MinWidth="800" Closing="Window_Closing">
     <Viewbox VerticalAlignment="Top">
         <StackPanel>
             <Menu Background="Transparent">
@@ -356,7 +356,6 @@
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
-                            <Button Content="+" Margin="5" Click="AddObjBtn_Click" x:Name="AddObjBtn"/>
                         </StackPanel>
                         <ListView Height="70" x:Name="ObjListView">
                             <ListView.ItemTemplate>                                

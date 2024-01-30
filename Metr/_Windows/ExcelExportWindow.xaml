@@ -8,6 +8,7 @@
         Title="Экспорт" Height="412" Width="478">
     <Viewbox VerticalAlignment="Top">
         <StackPanel Margin="5" CanVerticallyScroll="True" Height="300">
+            <ProgressBar x:Name="loadingProgress" IsIndeterminate="True" Height="20" Visibility="Collapsed"/>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Вид экспорта"/>
                 <ComboBox x:Name="TableTypeCmB" Width="200" SelectionChanged="TableTypeCmB_SelectionChanged"/>
