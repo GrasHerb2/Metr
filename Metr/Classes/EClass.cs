@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Metr.Classes
 {
@@ -233,20 +232,28 @@ namespace Metr.Classes
                                 sheet = book.Worksheets.Add();
                                 sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
 
+                                
+                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].Merge();
+                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].Value2 = devices[0].ObjectName;
+                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+
+
                                 for (int h = 0; h < settings.CHeader.Count; h++)
                                 {
-                                    sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
+                                    sheet.Cells[2, h + 1].Value2 = settings.CHeader[h];
+                                    sheet.Cells[2, h + 1].Borders.LineStyle = XlLineStyle.xlContinuous;
                                 }
 
                                 for (int i = 0; i < devices.Count; i++)
                                 {
                                     exportString = DeviceData.DevString(settings.Field, devices[i]);
-                                    for (int j = 0; j < exportString.Split('\t').Count(); j++)
+                                    for (int j = 0; j < exportString.Split('\t').Count()-1; j++)
                                     {
-                                        sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
-                                        sheet.Cells[i + 2, j + 1].Style.WrapText = true;
+                                        sheet.Cells[i + 3, j + 1].Value2 = exportString.Split('\t')[j];
+                                        sheet.Cells[i + 3, j + 1].Borders.LineStyle = XlLineStyle.xlContinuous;
                                     }
                                 }
+                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[devices.Count+2, settings.Field.Count()]].Columns.AutoFit();
                             }
                         }
                         else
@@ -266,10 +273,13 @@ namespace Metr.Classes
                                 }
                             }
                         }
-
+                        Marshal.ReleaseComObject(sheet);
+                        Marshal.ReleaseComObject(book);
 
                         ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName, Type.Missing);
                         ExcelApp.Quit();
+
+                        Marshal.ReleaseComObject(ExcelApp);
                     }
                     finally
                     {
