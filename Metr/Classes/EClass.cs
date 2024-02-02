@@ -8,9 +8,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Metr.Classes
 {
+    class JsonObject
+    {
+        public string Name { get; set;}
+        public List<DeviceData> devices1 { get; set; }
+    }
     class Column
     {
         public string Header { get; set; }
@@ -187,18 +193,31 @@ namespace Metr.Classes
 
                 if (saveFileDialog.FileName.Contains(".json"))
                 {
-                    string text = JsonSerializer.Serialize(devs);
+                    string text = "";
+                    if (settings.Settings[2] == 1)
+                    {
+                        foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
+                        {
+                            text = JsonSerializer.Serialize(new JsonObject() { Name = devices[0].ObjectName, devices1 = devices });
+                        }
+                    }
+                    else
+                    {
+                        text = JsonSerializer.Serialize(devs);
+                    }
+
+
                     File.WriteAllText(saveFileDialog.FileName, text);
                 }
 
                 if (saveFileDialog.FileName.Contains(".xlsx"))
                 {
-                    Application ExcelApp = null;
+                    Microsoft.Office.Interop.Excel.Application ExcelApp = null;
                     Workbook book = null;
                     Worksheet sheet = null;
                     try
                     {
-                        ExcelApp = new Application();
+                        ExcelApp = new Microsoft.Office.Interop.Excel.Application();
                         ExcelApp.Visible = false;
                         ExcelApp.DisplayAlerts = false;
                         
