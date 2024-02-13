@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Metr.Classes
 {
-    public class SettringsClass
+    public static class SettringsClass
     {
-        static string prelogin { get; set; }
-        static List<EClass> EPresets { get; set; }
+        public static string prelogin { get; set; }
+        public static List<EClass> EPresets { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static System.Net.WebRequestMethods;
 
 namespace Metr
 {
@@ -16,13 +17,12 @@ namespace Metr
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-
         MetrBaseEntities context = MetrBaseEntities.GetContext();
         List<string> dSearch = new List<string>();
         List<string> objects = new List<string>();
         DateTime? searchStart = null;
         DateTime? searchEnd = null;
+        string tempText;
         bool searchDef;
         bool searchDel;
         bool pprDate;
@@ -32,14 +32,38 @@ namespace Metr
         public MainWindow()
         {
             InitializeComponent();
-            if (!File.Exists(@"./settings.txt"))
-            { 
-                File.Create(@"./settings.txt");
-                File.WriteAllText(@"./settings.txt", "╞0\n╟");
+            if (!System.IO.File.Exists(@"./settings.txt"))
+            {
+                System.IO.File.Create(@"./settings.txt");
+                System.IO.File.WriteAllText(@"./settings.txt", "╟↔\n╟");
             }
             else
             {
-                File.ReadAllText(@"./settings.txt");
+                tempText = System.IO.File.ReadAllText(@"./settings.txt");
+                try
+                {
+                    SettringsClass.prelogin = tempText.Split('╟')[1][0] == '↔' ? "" : tempText.Split('╟')[1].Trim('\n');
+
+
+                    //Name = "ППР на год",
+                    //CHeader = new List<string> { "Объект", "Название", "Метрологические данные", "Заводской номер", "Измеряемый параметр", "МП/ППР1", "ППР2", "ППР3", "ППР4" },
+                    //Field = new List<int> { 4, 2, 6, 3, 5, 9, 11, 12, 13 },
+                    //Settings = new List<int> { 0, 2, 1 }
+                    foreach (string p in tempText.Split('╟')[2].Split('█'))
+                    {
+                        SettringsClass.EPresets.Add(new EClass()
+                        {
+                            Name = p.Split('▌')[0],
+                            CHeader = p.Split('▌')[1].Split('▀').ToList(),
+                            Field = p.Split('▌')[2].Split('▀').Select(int.Parse).ToList(),
+                            Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
+                        });
+                    }
+                }
+                catch
+                {
+
+                }
             }
             logIn();
             Thread thread = new Thread(UpdateTabs) { IsBackground = true };
