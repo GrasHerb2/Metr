@@ -6,14 +6,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 
 namespace Metr.Classes
 {
     class JsonObject
     {
-        public string Name { get; set;}
+        public string Name { get; set; }
         public List<DeviceData> devices1 { get; set; }
     }
     class Column
@@ -21,7 +20,7 @@ namespace Metr.Classes
         public string Header { get; set; }
         public int Field { get; set; }
     }
-    class EClass
+    public class EClass
     {
         public string Name { get; set; }
         public List<string> CHeader { get; set; }
@@ -219,7 +218,7 @@ namespace Metr.Classes
                         ExcelApp = new Microsoft.Office.Interop.Excel.Application();
                         ExcelApp.Visible = false;
                         ExcelApp.DisplayAlerts = false;
-                        
+
                         book = ExcelApp.Workbooks.Add();
 
 
@@ -232,7 +231,7 @@ namespace Metr.Classes
                                 sheet = book.Worksheets.Add();
                                 sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
 
-                                
+
                                 sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].Merge();
                                 sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].Value2 = devices[0].ObjectName;
                                 sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].HorizontalAlignment = XlHAlign.xlHAlignCenter;
@@ -247,13 +246,13 @@ namespace Metr.Classes
                                 for (int i = 0; i < devices.Count; i++)
                                 {
                                     exportString = DeviceData.DevString(settings.Field, devices[i]);
-                                    for (int j = 0; j < exportString.Split('\t').Count()-1; j++)
+                                    for (int j = 0; j < exportString.Split('\t').Count() - 1; j++)
                                     {
                                         sheet.Cells[i + 3, j + 1].Value2 = exportString.Split('\t')[j];
                                         sheet.Cells[i + 3, j + 1].Borders.LineStyle = XlLineStyle.xlContinuous;
                                     }
                                 }
-                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[devices.Count+2, settings.Field.Count()]].Columns.AutoFit();
+                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[devices.Count + 2, settings.Field.Count()]].Columns.AutoFit();
                             }
                         }
                         else
@@ -287,7 +286,7 @@ namespace Metr.Classes
                                         select p;
 
                         foreach (var process in processes)
-                        {                            
+                        {
                             if (process.MainWindowTitle == "")
                                 process.Kill();
                         }
