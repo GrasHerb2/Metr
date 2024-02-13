@@ -1,7 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     
-    <Style TargetType="DataGrid">
+    <Style TargetType="DataGrid" x:Key="MainGrid">
+
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="MinWidth" Value="1000"/>
+        <Setter Property="Height" Value="600"/>
+        <Setter Property="RowHeight" Value="50"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+
         <!-- Make the border and grid lines a little less imposing -->
         <Setter Property="BorderBrush" Value="#FFF1F1F1" />
         <Setter Property="HorizontalGridLinesBrush" Value="#FFF1F1F1" />

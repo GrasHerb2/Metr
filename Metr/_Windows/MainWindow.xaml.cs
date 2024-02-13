@@ -2,6 +2,7 @@
 using Metr.Classes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -15,6 +16,7 @@ namespace Metr
     /// </summary>
     public partial class MainWindow : Window
     {
+        
 
         MetrBaseEntities context = MetrBaseEntities.GetContext();
         List<string> dSearch = new List<string>();
@@ -30,6 +32,15 @@ namespace Metr
         public MainWindow()
         {
             InitializeComponent();
+            if (!File.Exists(@"./settings.txt"))
+            { 
+                File.Create(@"./settings.txt");
+                File.WriteAllText(@"./settings.txt", "╞0\n╟");
+            }
+            else
+            {
+                File.ReadAllText(@"./settings.txt");
+            }
             logIn();
             Thread thread = new Thread(UpdateTabs) { IsBackground = true };
             thread.Start();
@@ -180,7 +191,7 @@ namespace Metr
             {
                 if (User.RoleID >= 2)
                 {
-                    DeviceWin newDevice = new DeviceWin() { User = this.User };
+                    DeviceWin newDevice = new DeviceWin(true) { User = this.User };
                     newDevice.ShowDialog();
                     switch (newDevice.DialogResult)
                     {
@@ -196,7 +207,7 @@ namespace Metr
                     }
                 }
                 else MessageBox.Show("Для добавления необходимо иметь роль 'Пользователь' или выше");
-                Thread thread = new Thread(UpdateTabs) { IsBackground = true };
+                Thread thread = new Thread(startSearch) { IsBackground = true };
                 thread.Start();
             }
             catch (Exception ex)
@@ -406,7 +417,7 @@ namespace Metr
                     Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
                     DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);
                     Thread thread = new Thread(UpdateTabs) { IsBackground = true };
-                    thread.Start();                    
+                    thread.Start();
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
             }
@@ -458,26 +469,35 @@ namespace Metr
             ObjListView.ItemsSource = objects;
         }
 
+        string objTemp = "";
+        List<string> objNames = MetrBaseEntities.GetContext().Object.Select(o => o.Name).ToList();
         private void searchTBObjItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            objectsUpdate((sender as TextBlock).Text);
+        }
+
+        void objectsUpdate(string ObjName)
         {
             try
             {
-                if (searchTBObj.SelectedItem != null)
-                    if (searchTBObj.SelectedIndex != -1 && !objects.Contains(searchTBObj.Text))
-                    {
-                        objects.Add(searchTBObj.SelectedItem.ToString());
+                objTemp = ObjName;
+                if (objTemp != "" && !objects.Contains(objTemp) && objNames.Contains(objTemp))
+                {
+                    objects.Add(objNames.FirstOrDefault(o => o == objTemp));
 
-                        ObjListView.ItemsSource = null;
-                        ObjListView.ItemsSource = objects;
-                    }
+                    objTemp = "";
+                    ObjListView.ItemsSource = null;
+                    ObjListView.ItemsSource = objects;
+                    searchTBObj.Text = "";
+                }
             }
             catch
             {
-                searchTBObj.Text = "";
+
             }
         }
 
-        ExcelExportWindow excelExport = new ExcelExportWindow();
+        ExportWindow excelExport = new ExportWindow();
         private void expBtn_Click(object sender, RoutedEventArgs e)
         {
             excelExport.ShowDialog();
@@ -487,5 +507,22 @@ namespace Metr
         {
             Application.Current.Shutdown();
         }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+
+                if (searchTBObj.Text != "")
+                    objectsUpdate(searchTBObj.Text);
+                else
+                {
+                    Thread thread = new Thread(startSearch);
+                    thread.Start();
+                }
+
+            }
+        }
+
     }
 }

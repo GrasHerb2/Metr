@@ -1,4 +1,4 @@
-﻿<Window x:Class="Metr._Windows.ExcelExportWindow"
+﻿<Window x:Class="Metr._Windows.ExportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -31,7 +31,7 @@
                 <Label Content="Разделение приборов по объектам"/>
             </StackPanel>
             <Label Content="Выбранные столбцы"/>
-            <DataGrid Width="400" Height="150" x:Name="ColumnsDG" CanUserSortColumns="False" AutoGenerateColumns="False">
+            <DataGrid Width="400" Height="150" x:Name="ColumnsDG" CanUserSortColumns="False" AutoGenerateColumns="False" CanUserAddRows="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Заголовок" Width="150" Binding="{Binding Header}"/>
                     <DataGridTemplateColumn Header="Поле" Width="175">

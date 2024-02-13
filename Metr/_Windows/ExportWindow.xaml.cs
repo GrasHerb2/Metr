@@ -11,11 +11,11 @@ namespace Metr._Windows
     /// <summary>
     /// Логика взаимодействия для ExcelExportWindow.xaml
     /// </summary>
-    public partial class ExcelExportWindow : Window
+    public partial class ExportWindow : Window
     {
         List<Column> Columns = new List<Column>();
         EClass localSettings = new EClass();
-        public ExcelExportWindow()
+        public ExportWindow()
         {
             InitializeComponent();
 

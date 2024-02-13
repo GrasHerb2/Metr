@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Metr"
         mc:Ignorable="d"
-        Title="Вход" ResizeMode="NoResize" Height="450" Width="342">
+        Title="Вход" ResizeMode="NoResize" Height="450" Width="342" KeyUp="Window_KeyUp">
     <Viewbox>
         <StackPanel Margin="10">
                 <Label Content="Логин"/>
-            <TextBox Width="150" x:Name="loginTxt"/>
+            <TextBox Width="150" x:Name="loginTxt" TabIndex="0"/>
+            <RadioButton x:Name="logSaveRB" Margin="5" Content="Сохранить логин?" FontSize="11"/>
             <Label Content="Пароль"/>
-            <PasswordBox Width="150" x:Name="passTxt"/>
+            <PasswordBox Width="150" x:Name="passTxt" TabIndex="1"/>
             <Button Margin="10" Content="Вход" x:Name="entBtn" BorderBrush="White" Background="White" Click="entBtn_Click"/>
             <Button Margin="10,10,10,0" Content="Только просмотр" x:Name="readBtn" BorderBrush="White" Background="White" Click="readBtn_Click"/>
-            <Button Margin="10,0" Content="Запрос на регистрацию" x:Name="regBtn" BorderBrush="White" Background="White" Click="regBtn_Click"/>
+            <Button Margin="10" Content="Запрос на регистрацию" x:Name="regBtn" BorderBrush="White" Background="White" Click="regBtn_Click"/>
             </StackPanel>
     </Viewbox>
 </Window>

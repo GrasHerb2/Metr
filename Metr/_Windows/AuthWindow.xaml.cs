@@ -1,17 +1,8 @@
 ﻿using Metr.Classes;
-using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Metr
 {
@@ -53,22 +44,23 @@ namespace Metr
                     break;
                 case -1:
                     MessageBox.Show("Введён неверный пароль", "Авторизация", MessageBoxButton.OK, MessageBoxImage.Stop);
-                    
+
                     break;
                 case -2:
                     MessageBox.Show("Пользователь не найден", "Авторизация", MessageBoxButton.OK, MessageBoxImage.Stop);
-                    
+
                     break;
                 case -3:
                     MessageBox.Show("Ошибка доступа к БД", "Авторизация", MessageBoxButton.OK, MessageBoxImage.Error);
-                    
+
                     break;
             }
         }
 
         private void entBtn_Click(object sender, RoutedEventArgs e)
         {
-            Enter();            
+            if (logSaveRB.IsChecked.Value) { }
+            Enter();
         }
 
         private void readBtn_Click(object sender, RoutedEventArgs e)
@@ -82,7 +74,18 @@ namespace Metr
         private void regBtn_Click(object sender, RoutedEventArgs e)
         {
             RegWindow a = new RegWindow();
-            a.ShowDialog();            
+            a.ShowDialog();
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                switch (TabIndex)
+                {
+                    case 0: TabIndex++; break;
+                    case 1: TabIndex++; break;
+                    default: break;
+                }
         }
     }
 }

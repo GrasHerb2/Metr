@@ -25,13 +25,14 @@ namespace Metr
             dev = context.Device.Where(d=>d.Device_ID == i).FirstOrDefault();
             actions = new List<Actions>();
             bool noppr = false;
-            if (!string.IsNullOrEmpty(dev.NoteText))
-                noppr = dev.NoteText.Contains("^noPPR^");
+            
 
             if (!add) 
             { 
                 this.Title = "Изменение";
 
+                if (!string.IsNullOrEmpty(dev.NoteText))
+                    noppr = dev.NoteText.Contains("^noPPR^");
                 numTxt.Text = dev.FNum;
                 expDatePicker.SelectedDate = dev.ExpDate;
                 metrDataTxt.Text = dev.MetrData;
