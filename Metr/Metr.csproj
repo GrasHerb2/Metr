@@ -219,7 +219,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Release\Metr.exe.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -269,11 +268,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Release\EntityFramework.dll" />
-    <Content Include="Release\EntityFramework.SqlServer.dll" />
-    <Resource Include="Release\EntityFramework.SqlServer.xml" />
-    <Resource Include="Release\EntityFramework.xml" />
-    <Content Include="Release\Metr.exe" />
     <Content Include="MetrModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MetrModel.edmx</DependentUpon>
@@ -284,19 +278,6 @@
       <DependentUpon>MetrModel.edmx</DependentUpon>
       <LastGenOutput>MetrModel.cs</LastGenOutput>
     </Content>
-    <Content Include="Release\Metr.pdb" />
-    <Resource Include="Release\Metr.xml" />
-    <Content Include="Release\Microsoft.Bcl.AsyncInterfaces.dll" />
-    <Resource Include="Release\settings.txt" />
-    <Content Include="Release\ru\EntityFramework.resources.dll" />
-    <Content Include="Release\ru\EntityFramework.SqlServer.resources.dll" />
-    <Content Include="Release\System.Buffers.dll" />
-    <Content Include="Release\System.Numerics.Vectors.dll" />
-    <Content Include="Release\System.Runtime.CompilerServices.Unsafe.dll" />
-    <Content Include="Release\System.Text.Encodings.Web.dll" />
-    <Content Include="Release\System.Text.Json.dll" />
-    <Content Include="Release\System.Threading.Tasks.Extensions.dll" />
-    <Content Include="Release\System.ValueTuple.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
