@@ -82,5 +82,11 @@ namespace Metr
             }
 
         }
+        bool winPin = false;
+        private void WindowPin_Click(object sender, RoutedEventArgs e)
+        {
+            winPin = !winPin;
+            this.Topmost = winPin;
+        }
     }
 }

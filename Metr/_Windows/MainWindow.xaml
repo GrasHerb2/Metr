@@ -370,7 +370,6 @@
 
 
                 <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" x:Name="checksStack">
-                    <CheckBox Content="Брак" Margin="5" x:Name="defecktCheck"/>
                     <CheckBox Content="Исключённые" Margin="5" x:Name="delCheck"/>
                 </StackPanel>
 
