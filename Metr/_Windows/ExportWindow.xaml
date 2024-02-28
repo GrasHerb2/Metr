@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Экспорт" Height="412" Width="478">
     <Viewbox VerticalAlignment="Top">
-        <StackPanel Margin="5" CanVerticallyScroll="True" Height="300">
+        <StackPanel Margin="5" CanVerticallyScroll="True" Height="320">
             <ProgressBar x:Name="loadingProgress" IsIndeterminate="True" Height="20" Visibility="Collapsed"/>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Вид экспорта"/>
@@ -31,7 +31,7 @@
                 <Label Content="Разделение приборов по объектам"/>
             </StackPanel>
             <Label Content="Выбранные столбцы"/>
-            <DataGrid Width="400" Height="150" x:Name="ColumnsDG" CanUserSortColumns="False" AutoGenerateColumns="False" CanUserAddRows="True">
+            <DataGrid Width="400" Height="150" x:Name="ColumnsDG" CanUserSortColumns="False" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Заголовок" Width="150" Binding="{Binding Header}"/>
                     <DataGridTemplateColumn Header="Поле" Width="175">
@@ -59,14 +59,18 @@
                         </DataGridTemplateColumn.CellEditingTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Label Content="*нажмите дважды для изменения*"/>
+                                <Label Content=""/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 
             </DataGrid>
-            <Button x:Name="expBtn" Click="expBtn_Click" Content="Экспорт" Width="75" Margin="5" HorizontalAlignment="Right"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <Button x:Name="saveBtn" Click="saveBtn_Click" Content="💾" Background="Transparent" FontSize="20"/>
+                <Button x:Name="delBtn" Click="delBtn_Click" Content="🗑" Background="Transparent" FontSize="20"/>
+                <Button x:Name="expBtn" Click="expBtn_Click" Content="Экспорт" Width="75" Margin="250,5,0,5"/>
+            </StackPanel>
         </StackPanel>
     </Viewbox>
 </Window>

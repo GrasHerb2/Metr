@@ -24,7 +24,7 @@ namespace Metr.Classes
         public DateTime? pprDate3 { get; set; }
         public DateTime? pprDate4 { get; set; }
         public DateTime? pprMonthDate { get; set; }
-        public bool Defect { get; set; }
+        public bool Hidden { get; set; }
         public bool Delete { get; set; }
         public bool PPR { get; set; }
         public string Stroke { get; set; }
@@ -108,7 +108,7 @@ namespace Metr.Classes
                     Param = d.Param,
                     Note = note.Split(':')[0],
 
-                    Defect = note.Contains("^def^") ? V : false,
+                    Hidden = note.Contains("^hid^") ? V : false,
                     Delete = note.Contains("^del^") ? V : false,
                     PPR = !note.Contains("^noPPR^") ? V : false
                 });
@@ -136,23 +136,23 @@ namespace Metr.Classes
         /// <param name="objects">Объекты</param>
         /// <param name="searchStart">Дата начального срока годности</param>
         /// <param name="searchEnd">Дата крайнего срока годности</param>
-        /// <param name="Def">Отображение приборов с дефектом</param>
+        /// <param name="Hid">Отображение приборов скрытых из основного списка</param>
         /// <param name="Del">Отображение исключённых приборов</param>
         /// <param name="pprDate">(Для ППР) Отображение только с ППР текущего месяца</param>
         /// <param name="Exp">(Для Основного) Выделение даты просроченых приборов</param>
         /// <returns>Возвращает deviceList</returns>
-        public static List<DeviceData> Search(List<string> dSearch, List<string> objects, DateTime searchStart, DateTime searchEnd, bool Def, bool Del, bool pprDate = false, bool Exp = false)
+        public static List<DeviceData> Search(List<string> dSearch, List<string> objects, DateTime searchStart, DateTime searchEnd, bool Hid, bool Del, bool pprDate = false, bool Exp = false)
         {
             deviceListMain = deviceList;
             int total = deviceList.Count;
 
             deviceListExc = deviceListMain.Where(d =>
-                d.Defect || d.Delete
+                d.Delete
                 ).ToList();
 
             infoExc = " из " + deviceListExc.Count();
 
-            deviceListPPR = deviceListMain.Where(d => d.PPR && !d.Defect && !d.Delete && d.ExpDate != null).ToList();
+            deviceListPPR = deviceListMain.Where(d => d.PPR && !d.Hidden && !d.Delete && d.ExpDate != null).ToList();
 
             infoPPR = " из " + deviceListPPR.Count();
 
@@ -286,13 +286,9 @@ namespace Metr.Classes
                 deviceListPPR.OrderBy(d => d.ObjectName);
             }
 
-            if (Def)
+            if (!Hid)
                 deviceListMain = deviceListMain.Where(d =>
-                d.Defect
-                ).ToList();
-            else
-                deviceListMain = deviceListMain.Where(d =>
-                !d.Defect
+                !d.Hidden
                 ).ToList();
 
             if (Del)
@@ -501,6 +497,80 @@ namespace Metr.Classes
             }
             return MessageBoxResult.None;
         }
+
+
+        /// <summary>
+        /// Метод скрытия прибора
+        /// </summary>
+        /// <param name="devices">Скрываемые приборы</param>
+        /// <param name="context">Контекст БД</param>
+        /// <param name="user">Пользователь, скрывающий приборы</param>
+        public static void deviceHide(List<Device> devices, MetrBaseEntities context, int user)
+        {
+            List<Device> devs = new List<Device>();
+            string devstring = "";
+            if (devices.Count() != 0)
+            {
+                foreach (Device d in devices)
+                {
+                        devstring += "\n" + d.Name + " " + d.FNum;
+                        devs.Add(d);
+                }
+
+                if (MessageBox.Show("Будут скрыты следующие приборы:" + devstring + "\nПрименить?\n При скрытии данные приборы можно будет найти включив 'Скрытые' в критериях поиска.", "Изменение видимости", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    foreach (Device d in devs)
+                    {
+                        d.NoteText = string.IsNullOrEmpty(d.NoteText) ? ":^hid^" : d.NoteText.Contains(':') ? d.NoteText + "^hid^" : d.NoteText + ":^hid^";
+                        d.NoteText = d.NoteText.Insert(d.NoteText.IndexOf(':'), " \n'Скрыт'");
+                        context.Actions.Add(new Actions() { UserID = user, ActionDate = DateTime.Now, ActionText = "Скрытие прибора " + d.Name + " " + d.FNum, ComputerName = Environment.MachineName });
+                    }
+                    context.SaveChanges();
+                    MessageBox.Show("Приборы скрыты", "Изменение видимости", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выделите приборы для скрытия");
+            }
+        }
+
+        /// <summary>
+        /// Метод расскрытия прибора
+        /// </summary>
+        /// <param name="devices">Расскрываемые приборы</param>
+        /// <param name="context">Контекст БД</param>
+        /// <param name="user">Пользователь, расскрывающий приборы</param>
+        public static void deviceUnHide(List<Device> devices, MetrBaseEntities context, int user)
+        {
+            List<Device> devs = new List<Device>();
+            string devstring = "";
+            if (devices.Count() != 0)
+            {
+                foreach (Device d in devices)
+                {
+                    devstring += "\n" + d.Name + " " + d.FNum;
+                    devs.Add(d);
+                }
+                if (MessageBox.Show("Будут расскрыты следующие приборы:" + devstring + "\nПрименить?\n Данные приборы расскрыты.", "Изменение видимости", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    foreach (Device d in devs)
+                    {
+                        d.NoteText = d.NoteText
+                            .Remove(d.NoteText.IndexOf("^hid^"), 5)
+                            .Remove(d.NoteText.Contains(" \n'Скрыт'") ? d.NoteText.IndexOf(" \n'Скрыт'") : 0, d.NoteText.Contains(" \n'Скрыт'") ? 7 : 0);
+                        context.Actions.Add(new Actions() { UserID = user, ActionDate = DateTime.Now, ActionText = "Изменение видимости прибора " + d.Name + " " + d.FNum, ComputerName = Environment.MachineName });
+                    }
+                    context.SaveChanges();
+                    MessageBox.Show("Приборы расскрыты", "Изменение видимости", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выделите приборы, которые необходимо расскрыть");
+            }
+        }
+
         /// <summary>
         /// Метод удаления прибора
         /// </summary>
@@ -592,20 +662,20 @@ namespace Metr.Classes
             {
                 //"Пусто"
                 //"Порядковый номер"
-                //"Название прибора" />
-                //"Заводской номер" />
-                //"Объект" />
-                //"Измеряемый параметр" />
-                //"Единицы измерения" />
-                //"МП (Срок годности)" />
-                //"ППР (Только текущий месяц)" />
-                //"МП/ППР 1" />
-                //"ППР 1" />
-                //"ППР 2" />
-                //"ППР 3" />
-                //"ППР 4" />
-                //"Период ППР" />
-                //"Примечания" />
+                //"Название прибора" 
+                //"Заводской номер"
+                //"Объект" 
+                //"Измеряемый параметр"
+                //"Единицы измерения" 
+                //"МП (Срок годности)" 
+                //"ППР (Только текущий месяц)"
+                //"МП/ППР 1"
+                //"ППР 1"
+                //"ППР 2"
+                //"ППР 3"
+                //"ППР 4"
+                //"Период ППР"
+                //"Примечания"
                 switch (field)
                 {
                     case 0: rString += "\t"; break;
@@ -624,7 +694,7 @@ namespace Metr.Classes
                     case 13: rString += device.pprDate4 != null ? device.pprDate4.Value.ToString("dd.MM.yyyy") + "\t" : ""; break;
                     case 14: rString += device.Period + "\t"; break;
                     case 15: rString += device.Note + "\t"; break;
-                    default: break;
+                    default: rString += "\t"; break;
                 }
             }
             rString.Trim('\t');

@@ -69,7 +69,7 @@ namespace Metr
             }
             else 
             {
-                switch(DeviceData.DeviceEdit(dev,nameTxt.Text, objectCB.Text, numTxt.Text, paramTxt.Text, metrDataTxt.Text, expDatePicker.SelectedDate, periodTxt.Text.Replace(':',' '), noteTxt.Text.Replace(':', ' '), User.Id,!chbPPR.IsChecked.Value))
+                switch(DeviceData.DeviceEdit(dev,nameTxt.Text, objectCB.Text, numTxt.Text, paramTxt.Text, metrDataTxt.Text, expDatePicker.SelectedDate, periodTxt.Text.Replace(':',' ').Replace('+', ' '), noteTxt.Text.Replace(':', ' ').Replace('+', ' '), User.Id,!chbPPR.IsChecked.Value))
                 {
                     case MessageBoxResult.Yes:
                         DialogResult = true;

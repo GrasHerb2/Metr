@@ -279,7 +279,6 @@
       <DependentUpon>MetrModel.edmx</DependentUpon>
       <LastGenOutput>MetrModel.cs</LastGenOutput>
     </Content>
-    <Resource Include="_Windows\vecteezy_push-pin-icon-sign-symbol-design_10149654.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

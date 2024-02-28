@@ -281,7 +281,7 @@ namespace Metr
                 {
                     DeviceData device = e.Row.Item as DeviceData;
                     Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
-                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);
+                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' ').Replace('+', ' '), device.Note.Replace(':', ' ').Replace('+', ' '), User.Id);
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
@@ -408,7 +408,7 @@ namespace Metr
                 {
                     DeviceData device = e.Row.Item as DeviceData;
                     Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
-                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);
+                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' ').Replace('+', ' '), device.Note.Replace(':', ' ').Replace('+', ' '), User.Id);
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
@@ -428,7 +428,7 @@ namespace Metr
                 {
                     DeviceData device = e.Row.Item as DeviceData;
                     Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
-                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' '), device.Note.Replace(':', ' '), User.Id);;
+                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' ').Replace('+', ' '), device.Note.Replace(':', ' ').Replace('+', ' '), User.Id);;
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
@@ -448,10 +448,6 @@ namespace Metr
 
             ObjListView.ItemsSource = null;
             ObjListView.ItemsSource = objects;
-        }
-        private void searchTBObj_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

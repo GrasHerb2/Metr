@@ -75,17 +75,7 @@ namespace Metr.Classes
             });
             try
             {
-                string presets = File.ReadAllText("//presets.txt");
-                foreach (string set in presets.Split('\n'))
-                {
-                    EClass.Presets.Add(new EClass()
-                    {
-                        Name = set.Split(',')[0],
-                        CHeader = set.Split(',')[1].Split(' ').ToList(),
-                        Field = set.Split(',')[2].Split(' ').Select(int.Parse).ToList(),
-                        Settings = set.Split(',')[3].Split(' ').Select(int.Parse).ToList()
-                    });
-                }
+                Presets.AddRange(SettingsClass.EPresets);
             }
             catch
             {
