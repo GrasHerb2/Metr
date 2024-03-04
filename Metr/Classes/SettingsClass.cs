@@ -27,7 +27,7 @@ namespace Metr.Classes
             FileCheck();
             try
             {
-                prelogin = saveText.Split('╟')[1][0] == '↔' ? "" : saveText.Split('╟')[1].Trim();
+                prelogin = saveText.Split('╟')[1][0] == '↔' ? "" : saveText.Split('╟')[1].Split('├')[0];
 
 
                 //Name = "ППР на год",
@@ -89,7 +89,7 @@ namespace Metr.Classes
                     Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
                 };
                 if (preset == tpreset)
-                    saveText.Remove(saveText.IndexOf(p-1), p.Length+1);
+                    saveText.Remove(saveText.IndexOf(p)-1, p.Length+1);
             }
             System.IO.File.WriteAllText(saveFile, saveText);
         }

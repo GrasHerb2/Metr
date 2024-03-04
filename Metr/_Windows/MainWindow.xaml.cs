@@ -77,6 +77,7 @@ namespace Metr
                 }));
 
                 DeviceData.dataUpdate();
+                startSearch();
 
                 Dispatcher.Invoke(new Action(() =>
                 {
@@ -462,6 +463,7 @@ namespace Metr
         private void searchTBObjItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             objectsUpdate((sender as TextBlock).Text);
+            e.Handled = true;
         }
 
         void objectsUpdate(string ObjName)
@@ -476,7 +478,7 @@ namespace Metr
                     objTemp = "";
                     ObjListView.ItemsSource = null;
                     ObjListView.ItemsSource = objects;
-                    searchTBObj.Text = "";
+                    
                 }
             }
             catch
@@ -501,7 +503,12 @@ namespace Metr
             if (e.Key == Key.Enter)
             {
                 if (searchTBObj.Text != "")
+                {
                     objectsUpdate(searchTBObj.Text);
+                    searchTBObj.Text = "";
+                    e.Handled = true;
+                }
+
                 else if(mainTab.IsFocused)
                 {
                     Thread thread = new Thread(startSearch);
@@ -511,10 +518,9 @@ namespace Metr
                 Control s = e.Source as Control;
                 if (s != null)
                 {
-                    s.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    s.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
                 }
 
-                e.Handled = true;
             }
         }
 

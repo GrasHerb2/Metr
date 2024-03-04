@@ -14,7 +14,11 @@ namespace Metr
         public AuthWindow()
         {
             InitializeComponent();
-            loginTxt.Text = SettingsClass.prelogin;
+            if (SettingsClass.prelogin != "")
+            {
+                loginTxt.Text = SettingsClass.prelogin;
+                logSaveRB.IsChecked = true;
+            }
         }
 
         void Enter()
@@ -35,8 +39,9 @@ namespace Metr
                         User u0 = MetrBaseEntities.GetContext().User.Where(q => q.ULogin == log).FirstOrDefault();
                         authUser = new CurrentUser() { Id = u0.User_ID, FullName = u0.FullName, RoleID = u0.RoleID };
 
-                        if (logSaveRB.IsChecked.Value) { SettingsClass.SaveLogin(loginTxt.Text); }
-                        
+                        if (logSaveRB.IsChecked.Value) SettingsClass.SaveLogin(loginTxt.Text);
+                        else SettingsClass.SaveLogin("↔");
+
                         this.DialogResult = true;
                         return;
                     }
