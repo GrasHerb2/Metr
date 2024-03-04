@@ -1,12 +1,12 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Win32;
+using SpreadsheetLight;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Windows;
 
 namespace Metr.Classes
 {
@@ -68,8 +68,8 @@ namespace Metr.Classes
             new EClass()
             {
                 Name = "Иной",
-                CHeader = new List<string> { "", "", "", "", "" },
-                Field = new List<int> { 0, 0, 0, 0, 0 },
+                CHeader = new List<string> { "Введите заголовок" },
+                Field = new List<int> { 0 },
                 Settings = new List<int> { 0, 1, 0 }
             }
             });
@@ -82,7 +82,7 @@ namespace Metr.Classes
 
             }
         }
-        public static void ExportExcel(EClass settings)
+        public static void Export(EClass settings)
         {
 
 
@@ -200,17 +200,10 @@ namespace Metr.Classes
 
                 if (saveFileDialog.FileName.Contains(".xlsx"))
                 {
-                    Microsoft.Office.Interop.Excel.Application ExcelApp = null;
-                    Workbook book = null;
-                    Worksheet sheet = null;
                     try
                     {
-                        ExcelApp = new Microsoft.Office.Interop.Excel.Application();
-                        ExcelApp.Visible = false;
-                        ExcelApp.DisplayAlerts = false;
-
-                        book = ExcelApp.Workbooks.Add();
-
+                        SLDocument sl = new SLDocument();
+                        SLStyle style = new SLStyle();
 
                         string exportString = "";
 
@@ -218,19 +211,30 @@ namespace Metr.Classes
                         {
                             foreach (List<DeviceData> devices in devs.GroupBy(d => d.ObjectName).Select(grp => grp.ToList()))
                             {
-                                sheet = book.Worksheets.Add();
-                                sheet.Name = devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName;
 
+                                sl.AddWorksheet(devices[0].ObjectName.Length > 30 ? devices[0].ObjectName.Remove(30) : devices[0].ObjectName);
+                                style = sl.GetCellStyle(1, 1);
+                                style.Alignment.Horizontal = HorizontalAlignmentValues.Center;
+                                style.Alignment.Vertical = VerticalAlignmentValues.Center;
 
-                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].Merge();
-                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].Value2 = devices[0].ObjectName;
-                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, settings.Field.Count()]].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                                sl.SetCellValue(1, 1, devices[0].ObjectName);
+                                sl.MergeWorksheetCells(1, 1, 1, settings.Field.Count());
 
+                                sl.SetCellStyle(1, 1, style);
 
                                 for (int h = 0; h < settings.CHeader.Count; h++)
                                 {
-                                    sheet.Cells[2, h + 1].Value2 = settings.CHeader[h];
-                                    sheet.Cells[2, h + 1].Borders.LineStyle = XlLineStyle.xlContinuous;
+                                    sl.SetCellValue(2, h + 1, settings.CHeader[h]);
+
+                                    style = sl.GetCellStyle(2, h + 1);
+                                    style.Border.Outline = true;
+
+                                    style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+
+                                    sl.SetCellStyle(2, h + 1, style);
                                 }
 
                                 for (int i = 0; i < devices.Count; i++)
@@ -238,19 +242,39 @@ namespace Metr.Classes
                                     exportString = DeviceData.DevString(settings.Field, devices[i]);
                                     for (int j = 0; j < exportString.Split('\t').Count() - 1; j++)
                                     {
-                                        sheet.Cells[i + 3, j + 1].Value2 = exportString.Split('\t')[j];
-                                        sheet.Cells[i + 3, j + 1].Borders.LineStyle = XlLineStyle.xlContinuous;
+                                        sl.SetCellValue(i + 3, j + 1, exportString.Split('\t')[j]);
+
+                                        style = sl.GetCellStyle(i + 3, j + 1);
+                                        style.Border.Outline = true;
+
+                                        style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+
+                                        sl.SetCellStyle(i + 3, j + 1, style);
                                     }
                                 }
-                                sheet.Range[sheet.Cells[1, 1], sheet.Cells[devices.Count + 2, settings.Field.Count()]].Columns.AutoFit();
                             }
+
+                            sl.DeleteWorksheet(sl.GetWorksheetNames()[0]);
                         }
                         else
                         {
-                            sheet = book.Worksheets.Add();
+                            sl.RenameWorksheet(sl.GetWorksheetNames()[0], "Экспорт");
                             for (int h = 0; h < settings.CHeader.Count; h++)
                             {
-                                sheet.Cells[1, h + 1].Value2 = settings.CHeader[h];
+                                sl.SetCellValue(2, h + 1, settings.CHeader[h]);
+
+                                style = sl.GetCellStyle(2, h + 1);
+                                style.Border.Outline = true;
+
+                                style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+
+                                sl.SetCellStyle(2, h + 1, style);
                             }
 
                             for (int i = 0; i < devs.Count; i++)
@@ -258,28 +282,28 @@ namespace Metr.Classes
                                 exportString = DeviceData.DevString(settings.Field, devs[i]);
                                 for (int j = 0; j < exportString.Split('\t').Count(); j++)
                                 {
-                                    sheet.Cells[i + 2, j + 1].Value2 = exportString.Split('\t')[j];
+                                    sl.SetCellValue(i + 3, j + 1, exportString.Split('\t')[j]);
+
+                                    style = sl.GetCellStyle(i + 3, j + 1);
+                                    style.Border.Outline = true;
+
+                                    style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+
+                                    style.SetWrapText(true);
+                                    sl.SetCellStyle(i + 3, j + 1, style);
                                 }
+
+                                sl.AutoFitColumn(1, i + 3, 20);
                             }
                         }
-                        Marshal.ReleaseComObject(sheet);
-                        Marshal.ReleaseComObject(book);
-
-                        ExcelApp.Application.ActiveWorkbook.SaveAs(saveFileDialog.FileName, Type.Missing);
-                        ExcelApp.Quit();
-
-                        Marshal.ReleaseComObject(ExcelApp);
+                        sl.SaveAs(saveFileDialog.FileName);
                     }
-                    finally
+                    catch(Exception ex)
                     {
-                        var processes = from p in Process.GetProcessesByName("EXCEL")
-                                        select p;
-
-                        foreach (var process in processes)
-                        {
-                            if (process.MainWindowTitle == "")
-                                process.Kill();
-                        }
+                        
                     }
 
                 }

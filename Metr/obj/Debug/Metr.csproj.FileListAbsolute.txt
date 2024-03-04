@@ -58,3 +58,10 @@ C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.exe
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.pdb
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\TextWin.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\TextWin.baml
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\SpreadsheetLight.dll
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\System.Drawing.Common.dll
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\System.IO.Packaging.dll
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\SpreadsheetLight.xml
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\bin\Debug\System.IO.Packaging.xml

@@ -13,7 +13,7 @@ namespace Metr._Windows
     /// </summary>
     public partial class ExportWindow : Window
     {
-        List<Column> Columns = new List<Column>();
+        List<Classes.Column> Columns = new List<Classes.Column>();
         EClass localSettings = new EClass();
         public ExportWindow()
         {
@@ -22,11 +22,12 @@ namespace Metr._Windows
             EClass.UpdPresets();
 
             UpdateSettings(EClass.Presets[0]);
+
+            TableTypeCmB.SelectedIndex = 0;
         }
         void UpdateSettings(EClass a)
         {
             TableTypeCmB.ItemsSource = EClass.Presets.Select(p => p.Name).ToList();
-            TableTypeCmB.SelectedIndex = 0;
 
             SearchUseChB.IsChecked = a.Settings[0] == 1 ? true : false;
             OriginTableCmB.SelectedIndex = a.Settings[1];
@@ -35,7 +36,7 @@ namespace Metr._Windows
             ColumnsDG.ItemsSource = null;
             Columns.Clear();
             for (int i = 0; i < a.CHeader.Count; i++)
-                Columns.Add(new Column() { Header = a.CHeader[i], Field = a.Field[i] });
+                Columns.Add(new Classes.Column() { Header = a.CHeader[i], Field = a.Field[i] });
             ColumnsDG.ItemsSource = Columns;
         }
 
@@ -68,7 +69,7 @@ namespace Metr._Windows
                 localSettings.Field = Columns.Select(p => p.Field).ToList();
                 localSettings.Settings = new List<int> { SearchUseChB.IsChecked.Value ? 1 : 0, OriginTableCmB.SelectedIndex, ObjSortChB.IsChecked.Value ? 1 : 0 };
             }));
-            EClass.ExportExcel(localSettings);
+            EClass.Export(localSettings);
             Dispatcher.Invoke(new Action(() =>
             {
                 this.IsEnabled = true;
