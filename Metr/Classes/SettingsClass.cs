@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace Metr.Classes
-{
+{   
     public static class SettingsClass
     {
+        public static string status { get; set; }
         public static string prelogin { get; set; }
         public static List<EClass> EPresets { get; set; }
         static string saveFile = @"./settings.txt";
@@ -13,7 +15,11 @@ namespace Metr.Classes
         public static void FileCheck()
         {
             fEx = System.IO.File.Exists(saveFile);
-            if (!fEx) System.IO.File.Create(saveFile).Close();
+            if (!fEx)
+            {
+                var a = System.IO.File.Create(saveFile);
+                a.Close();
+            }
 
             saveText = System.IO.File.ReadAllText(saveFile);
             saveText = saveText.Contains('╟') ? saveText : "╟↔" + saveText;
@@ -23,24 +29,28 @@ namespace Metr.Classes
         public static void LoadSettings(bool logSave = false)
         {
             FileCheck();
-            try
-            {
-                prelogin = saveText.Split('╟')[1][0] == '↔' ? "" : saveText.Split('╟')[1].Split('├')[0];
 
-                foreach (string p in saveText.Split('├')[1].Split('█'))
+            prelogin = saveText.Split('╟')[1][0] == '↔' ? "" : saveText.Split('╟')[1].Split('├')[0];
+
+            foreach (string p in saveText.Split('├')[1].Split('█'))
+            {
+                try
                 {
-                    EPresets.Add(new EClass()
+                    if (p != "")
                     {
-                        Name = p.Split('▌')[0],
-                        CHeader = p.Split('▌')[1].Split('▀').ToList(),
-                        Field = p.Split('▌')[2].Split('▀').Select(int.Parse).ToList(),
-                        Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
-                    });
+                        EPresets.Add(new EClass()
+                        {
+                            Name = p.Split('▌')[0],
+                            CHeader = p.Split('▌')[1].Split('▀').ToList(),
+                            Field = p.Split('▌')[2].Split('▀').Select(int.Parse).ToList(),
+                            Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
+                        });
+                    }
                 }
-            }
-            catch
-            {
-
+                catch
+                {
+                    break;
+                }
             }
         }
 
@@ -82,7 +92,7 @@ namespace Metr.Classes
                     Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
                 };
                 if (preset == tpreset)
-                    saveText.Remove(saveText.IndexOf(p)-1, p.Length+1);
+                    saveText.Remove(saveText.IndexOf(p) - 1, p.Length + 1);
             }
             System.IO.File.WriteAllText(saveFile, saveText);
         }

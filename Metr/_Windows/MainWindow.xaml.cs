@@ -16,9 +16,16 @@ namespace Metr
     public partial class MainWindow : Window
     {
         MetrBaseEntities context = MetrBaseEntities.GetContext();
+        
         List<string> objNames = new List<string>();
         List<string> dSearch = new List<string>();
         List<string> objects = new List<string>();
+
+
+        ExportWindow exWin;
+        ActionsWindow actionsWindow;
+        UserManagmentWindow umw;
+        
         DateTime? searchStart = null;
         DateTime? searchEnd = null;
         string tempText;
@@ -27,10 +34,19 @@ namespace Metr
         bool pprDate;
         bool Exp;
 
+
+        string objTemp = "";
+
         public CurrentUser User { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+
+            exWin = new ExportWindow();
+            actionsWindow = new ActionsWindow();
+            umw = new UserManagmentWindow();
+
+
             try
             {
                 SettingsClass.LoadSettings();
@@ -377,7 +393,6 @@ namespace Metr
             DatePickers.IsEnabled = !dateChB.IsChecked.Value;
         }
 
-        UserManagmentWindow umw = new UserManagmentWindow();
         private void userBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -394,7 +409,6 @@ namespace Metr
                 MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        ActionsWindow actionsWindow = new ActionsWindow();
         private void journalBtn_Click(object sender, RoutedEventArgs e)
         {
             actionsWindow.Show();
@@ -490,7 +504,7 @@ namespace Metr
             ObjListView.ItemsSource = objects;
         }
 
-        string objTemp = "";
+        
         private void searchTBObjItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             objectsUpdate((sender as TextBlock).Text);
@@ -518,10 +532,10 @@ namespace Metr
             }
         }
 
-        ExportWindow excelExport = new ExportWindow();
+        
         private void expBtn_Click(object sender, RoutedEventArgs e)
         {
-            excelExport.ShowDialog();
+            exWin.ShowDialog();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

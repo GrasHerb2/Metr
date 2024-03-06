@@ -178,6 +178,9 @@
     <Compile Include="_Windows\RegWindow.xaml.cs">
       <DependentUpon>RegWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="_Windows\StatusWin.xaml.cs">
+      <DependentUpon>StatusWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="_Windows\TextWin.xaml.cs">
       <DependentUpon>TextWin.xaml</DependentUpon>
     </Compile>
@@ -225,6 +228,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="_Windows\StatusWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

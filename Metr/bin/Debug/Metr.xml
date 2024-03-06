@@ -267,6 +267,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:Metr._Windows.StatusWin">
+            <summary>
+            Логика взаимодействия для StatusWin.xaml
+            </summary>
+            <summary>
+            StatusWin
+            </summary>
+        </member>
+        <member name="M:Metr._Windows.StatusWin.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:Metr._Windows.TextWin">
             <summary>
             Логика взаимодействия для TextWin.xaml
