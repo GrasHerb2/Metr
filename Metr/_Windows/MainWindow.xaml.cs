@@ -2,7 +2,6 @@
 using Metr.Classes;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -23,7 +22,7 @@ namespace Metr
         DateTime? searchStart = null;
         DateTime? searchEnd = null;
         string tempText;
-        bool searchDef;
+        bool searchHide;
         bool searchDel;
         bool pprDate;
         bool Exp;
@@ -32,9 +31,15 @@ namespace Metr
         public MainWindow()
         {
             InitializeComponent();
+            try
+            {
+                SettingsClass.LoadSettings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-            SettingsClass.LoadSettings();
-            
             logIn();
             Thread thread = new Thread(UpdateTabs) { IsBackground = true };
             thread.Start();
@@ -120,9 +125,10 @@ namespace Metr
                     searchStart = expDateStart.SelectedDate != null ? expDateStart.SelectedDate : DateTime.MinValue;
                     searchEnd = expDateEnd.SelectedDate != null ? expDateEnd.SelectedDate : DateTime.MaxValue;
                     dSearch = new List<string>() { searchTBNum.Text, searchTBName.Text };
+                    searchHide = hideCheck.IsChecked.Value;
                 }));
 
-                DeviceData.Search(dSearch, objects, searchStart.Value, searchEnd.Value, searchDef, searchDel, pprDate, Exp);
+                DeviceData.Search(dSearch, objects, searchStart.Value, searchEnd.Value, searchHide, searchDel, pprDate, Exp);
 
                 Dispatcher.Invoke(new Action(() =>
                 {
@@ -156,6 +162,31 @@ namespace Metr
         {
             Thread thread = new Thread(startSearch);
             thread.Start();
+        }
+        private void cHide_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (User.RoleID >= 2)
+                {
+                    List<Device> devicesHide = new List<Device>();
+                    List<Device> devicesUnHide = new List<Device>();
+                    foreach (DeviceData d in deviceGrid.SelectedItems)
+                    {
+                        devicesHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID && !(dev.NoteText + "").Contains("^hid^")).FirstOrDefault());
+                        devicesUnHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID && (dev.NoteText + "").Contains("^hid^")).FirstOrDefault());
+                    }
+                    if (devicesHide.Count() > 0) DeviceData.deviceHide(devicesHide, context, User.Id);
+                    if (devicesUnHide.Count() > 0) DeviceData.deviceUnHide(devicesUnHide, context, User.Id);
+                }
+                else MessageBox.Show("Для изменения видимости необходимо иметь роль 'Пользователь' или выше");
+                Thread thread = new Thread(UpdateTabs) { IsBackground = true };
+                thread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void cDel_Click(object sender, RoutedEventArgs e)
@@ -303,7 +334,7 @@ namespace Metr
                 {
                     case 0:
                         itemCountLbl.Content = DeviceData.infoMain;
-
+                        hideCheck.IsEnabled = true;
                         checksStack.IsEnabled = true;
                         expChB.IsEnabled = true;
                         DatePickers.IsEnabled = true;
@@ -311,7 +342,7 @@ namespace Metr
                         break;
                     case 1:
                         itemCountLbl.Content = DeviceData.infoPPR;
-
+                        hideCheck.IsEnabled = false;
                         dateChB.IsEnabled = true;
                         checksStack.IsEnabled = false;
                         expChB.IsEnabled = false;
@@ -320,7 +351,7 @@ namespace Metr
                         break;
                     case 2:
                         itemCountLbl.Content = DeviceData.infoExc;
-
+                        hideCheck.IsEnabled = false;
                         dateChB.IsEnabled = false;
                         checksStack.IsEnabled = false;
                         expChB.IsEnabled = false;
@@ -429,7 +460,7 @@ namespace Metr
                 {
                     DeviceData device = e.Row.Item as DeviceData;
                     Device dev = context.Device.Where(d => d.Device_ID == device.ID).FirstOrDefault();
-                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' ').Replace('+', ' '), device.Note.Replace(':', ' ').Replace('+', ' '), User.Id);;
+                    DeviceData.DeviceEdit(dev, device.Name, device.ObjectName, device.FNum, device.Param, device.MetrData, device.ExpDate, device.Period.Replace(':', ' ').Replace('+', ' '), device.Note.Replace(':', ' ').Replace('+', ' '), User.Id); ;
                 }
                 else MessageBox.Show("Для редактирования необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
@@ -478,7 +509,7 @@ namespace Metr
                     objTemp = "";
                     ObjListView.ItemsSource = null;
                     ObjListView.ItemsSource = objects;
-                    
+
                 }
             }
             catch
@@ -509,7 +540,7 @@ namespace Metr
                     e.Handled = true;
                 }
 
-                else if(mainTab.IsFocused)
+                else if (mainTab.IsFocused)
                 {
                     Thread thread = new Thread(startSearch);
                     thread.Start();

@@ -9,15 +9,13 @@ namespace Metr.Classes
         public static List<EClass> EPresets { get; set; }
         static string saveFile = @"./settings.txt";
         static string saveText = "";
-
+        static bool fEx = false;
         public static void FileCheck()
         {
-            if (!System.IO.File.Exists(saveFile))
-            {
-                System.IO.File.Create(saveFile);
-                System.IO.File.WriteAllText(saveFile, "╟↔├");
-            }
-            saveText = System.IO.File.ReadAllText(@"./settings.txt");
+            fEx = System.IO.File.Exists(saveFile);
+            if (!fEx) System.IO.File.Create(saveFile).Close();
+
+            saveText = System.IO.File.ReadAllText(saveFile);
             saveText = saveText.Contains('╟') ? saveText : "╟↔" + saveText;
             saveText = saveText.Contains('├') ? saveText : saveText + "├";
         }
@@ -29,11 +27,6 @@ namespace Metr.Classes
             {
                 prelogin = saveText.Split('╟')[1][0] == '↔' ? "" : saveText.Split('╟')[1].Split('├')[0];
 
-
-                //Name = "ППР на год",
-                //CHeader = new List<string> { "Объект", "Название", "Метрологические данные", "Заводской номер", "Измеряемый параметр", "МП/ППР1", "ППР2", "ППР3", "ППР4" },
-                //Field = new List<int> { 4, 2, 6, 3, 5, 9, 11, 12, 13 },
-                //Settings = new List<int> { 0, 2, 1 }
                 foreach (string p in saveText.Split('├')[1].Split('█'))
                 {
                     EPresets.Add(new EClass()

@@ -42,8 +42,9 @@
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem x:Name="cEdit" Header="Редактирование" Click="contextEdit_Click"/>
-                                <MenuItem x:Name="cDel" Header="Исключить" Click="cDel_Click"/>
-                            </ContextMenu>
+                                    <MenuItem x:Name="cHide" Header="Скрыть/раскрыть" Click="cHide_Click"/>
+                                    <MenuItem x:Name="cDel" Header="Исключить" Click="cDel_Click"/>
+                                </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
 
@@ -83,14 +84,18 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn MinWidth="100" Width="*" Header="Объект" Binding="{Binding ObjectName, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
+                            <DataGridTemplateColumn MinWidth="100" Width="*" Header="Объект">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding ObjectName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox IsEditable="True" ItemsSource="{Binding Items, ElementName=searchTBObjItem}" Text="{Binding ObjectName, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
 
                             <DataGridTemplateColumn MinWidth="100" Width="*" CanUserSort="True" Header="Срок годности" SortMemberPath="ExpDate">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -175,16 +180,20 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn MinWidth="100" Width="*" Header="Объект" Binding="{Binding ObjectName, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
+                                <DataGridTemplateColumn MinWidth="100" Width="*" Header="Объект">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding ObjectName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox IsEditable="True" ItemsSource="{Binding Items, ElementName=searchTBObjItem}" Text="{Binding ObjectName, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn MinWidth="100" Width="*" Header="МП">
+                                <DataGridTemplateColumn MinWidth="100" Width="*" Header="МП">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding ExpDate}" ContentStringFormat="dd.MM.yyyy"/>
@@ -276,16 +285,20 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn MinWidth="100" Width="*" Header="Объект" Binding="{Binding ObjectName, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
+                                <DataGridTemplateColumn MinWidth="100" Width="*" Header="Объект">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding ObjectName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox IsEditable="True" ItemsSource="{Binding Items, ElementName=searchTBObjItem}" Text="{Binding ObjectName, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn MinWidth="100" Width="*" CanUserSort="True" Header="Срок годности" SortMemberPath="ExpDate">
+                                <DataGridTemplateColumn MinWidth="100" Width="*" CanUserSort="True" Header="Срок годности" SortMemberPath="ExpDate">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding ExpDate, StringFormat=dd.MM.yyyy}" TextDecorations="{Binding Stroke}" />
@@ -348,17 +361,7 @@
 
                 <StackPanel Grid.Column="1" Grid.RowSpan="2">
                     <Label Content="По объекту"/>
-                    <StackPanel Orientation="Horizontal">
-
-                        <!--SelectionChanged="searchTBObj_SelectionChanged"-->
-                        <ComboBox IsEditable="True" Width="200" Margin="5" x:Name="searchTBObj" TabIndex="4">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock MouseLeftButtonUp="searchTBObjItem_MouseLeftButtonUp" x:Name="searchTBObjItem" Width="200" Margin="-4" Text="{Binding}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
+                    
                     <ListView Height="70" x:Name="ObjListView">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -366,10 +369,22 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+
+                            <!--SelectionChanged="searchTBObj_SelectionChanged"-->
+                            <ComboBox IsEditable="True" Width="200" Margin="0,5" x:Name="searchTBObj" TabIndex="4">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock MouseLeftButtonUp="searchTBObjItem_MouseLeftButtonUp" x:Name="searchTBObjItem" Width="200" Margin="-4" Text="{Binding}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
 
 
                 <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" x:Name="checksStack">
+                    <CheckBox Content="Скрытые" Margin="5" x:Name="hideCheck"/>
                     <CheckBox Content="Исключённые" Margin="5" x:Name="delCheck"/>
                 </StackPanel>
 

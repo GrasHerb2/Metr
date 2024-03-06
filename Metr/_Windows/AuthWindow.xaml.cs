@@ -1,6 +1,7 @@
 ﻿using Metr.Classes;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Metr
@@ -19,6 +20,7 @@ namespace Metr
                 loginTxt.Text = SettingsClass.prelogin;
                 logSaveRB.IsChecked = true;
             }
+            loginTxt.Focus();
         }
 
         void Enter()
@@ -87,12 +89,12 @@ namespace Metr
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                switch (TabIndex)
-                {
-                    case 0: TabIndex++; break;
-                    case 1: TabIndex++; break;
-                    default: break;
-                }
+            {
+                if (entBtn.IsFocused)
+                    Enter();
+                else
+                    (e.Source as Control).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
         }
     }
 }

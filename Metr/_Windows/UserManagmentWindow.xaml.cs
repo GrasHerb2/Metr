@@ -27,7 +27,6 @@ namespace Metr
         {
             InitializeComponent();            
             context = MetrBaseEntities.GetContext();
-            UControl.UpdateUsers(context);
             UpdateTabs();
         }
         void UpdateTabs() 
