@@ -6,7 +6,7 @@ using System.Windows;
 namespace Metr.Classes
 {
 
-    internal class DeviceData
+    public class DeviceData
     {
 
         public int ID { get; set; }

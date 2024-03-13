@@ -67,3 +67,4 @@ C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.exe
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.pdb
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\StatusWin.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\StatusWin.baml
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\GeneratedInternalTypeHelper.g.cs

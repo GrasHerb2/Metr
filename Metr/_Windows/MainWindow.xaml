@@ -12,14 +12,15 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="10*"/>
             </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Background="Transparent">
-            <MenuItem Header="Доп. функции">
+            <Menu Grid.Row="0" Background="Transparent">
                 <MenuItem Header="Экспорт" x:Name="expBtn" Click="expBtn_Click"/>
                 <Separator/>
+            <MenuItem Header="Доп. функции">
                 <MenuItem Header="Пользователи" x:Name="userBtn" Click="userBtn_Click"/>
                 <MenuItem Header="Журнал действий" x:Name="journalBtn" Click="journalBtn_Click"/>
-            </MenuItem>
-            <MenuItem x:Name="infoBtn" Header="О программе" Click="infoBtn_Click"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="infoBtn" Header="О программе" Click="infoBtn_Click"/>
             <MenuItem x:Name="signOutBtn" Header="Выйти из системы" Click="signOutBtn_Click"/>
         </Menu>
         <Grid Grid.Row="1">

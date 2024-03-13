@@ -42,9 +42,7 @@ namespace Metr
         {
             InitializeComponent();
 
-            exWin = new ExportWindow();
-            actionsWindow = new ActionsWindow();
-            umw = new UserManagmentWindow();
+            
 
 
             try
@@ -217,6 +215,7 @@ namespace Metr
                         devices.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
                     }
                     DeviceData.deviceDel(devices, context, User.Id);
+                    DeviceData.deviceUnHide(devices, context, User.Id);
                 }
                 else MessageBox.Show("Для удаления необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
@@ -285,14 +284,11 @@ namespace Metr
             {
                 if (User.RoleID >= 2)
                 {
-                    int index = ((DeviceData)deviceGrid.SelectedItem).ID;
+                    int index = ((DeviceData)deviceGrid.SelectedItems[0]).ID;
                     DeviceWin newDevice = new DeviceWin(false, index) { User = this.User };
                     newDevice.ShowDialog();
                     switch (newDevice.DialogResult)
                     {
-                        case true:
-                            MessageBox.Show("Сохранено!", "Изменение", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
                         case false:
                             MessageBox.Show("Изменение отменено", "Изменение", MessageBoxButton.OK, MessageBoxImage.Information);
                             break;
@@ -399,6 +395,7 @@ namespace Metr
             {
                 if (User.RoleID == 3)
                 {
+                    umw = new UserManagmentWindow();
                     umw.User = User.Id;
                     umw.ShowDialog();
                 }
@@ -411,6 +408,7 @@ namespace Metr
         }
         private void journalBtn_Click(object sender, RoutedEventArgs e)
         {
+            actionsWindow = new ActionsWindow();
             actionsWindow.Show();
         }
 
@@ -535,6 +533,7 @@ namespace Metr
         
         private void expBtn_Click(object sender, RoutedEventArgs e)
         {
+            exWin = new ExportWindow();
             exWin.ShowDialog();
         }
 

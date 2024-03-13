@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Windows;
 
 namespace Metr.Classes
 {
@@ -22,6 +21,27 @@ namespace Metr.Classes
     }
     public class EClass
     {
+        public static List<string> converted { get; } = new List<string>()
+        {
+            "Пусто",
+            "Порядковый номер",
+            "Название прибора",
+            "Заводской номер",
+            "Объект",
+            "Измеряемый параметр",
+            "Единицы измерения",
+            "МП (Срок годности)",
+            "ППР (Только текущий месяц)",
+            "МП/ППР 1",
+            "ППР 1",
+            "ППР 2",
+            "ППР 3",
+            "ППР 4",
+            "Период ППР",
+            "Примечания"
+        };
+
+
         public string Name { get; set; }
         public List<string> CHeader { get; set; }
         public List<int> Field { get; set; }
@@ -82,7 +102,7 @@ namespace Metr.Classes
 
             }
         }
-        public static void Export(EClass settings)
+        public static void Export(EClass settings, List<DeviceData> pData = null)
         {
 
 
@@ -92,23 +112,30 @@ namespace Metr.Classes
 
 
             List<DeviceData> devs = new List<DeviceData>();
-
-            if (settings.Settings[0] == 0)
+            if (pData != null)
             {
-                DeviceData.Search(new List<string>() { "", "" }, new List<string>() { }, DateTime.MinValue, DateTime.MaxValue, false, false, settings.Field.Contains(8));
+                devs = pData;
             }
-
-            switch (settings.Settings[1])
+            else
             {
-                case 0:
-                    devs.AddRange(DeviceData.deviceListMain);
-                    devs.AddRange(DeviceData.deviceListPPR);
-                    devs.AddRange(DeviceData.deviceListExc);
-                    devs = devs.Distinct().ToList();
-                    break;
-                case 1: devs = DeviceData.deviceListMain; break;
-                case 2: devs = DeviceData.deviceListPPR; break;
-                case 3: devs = DeviceData.deviceListExc; break;
+
+                if (settings.Settings[0] == 0)
+                {
+                    DeviceData.Search(new List<string>() { "", "" }, new List<string>() { }, DateTime.MinValue, DateTime.MaxValue, false, false, settings.Field.Contains(8));
+                }
+
+                switch (settings.Settings[1])
+                {
+                    case 0:
+                        devs.AddRange(DeviceData.deviceListMain);
+                        devs.AddRange(DeviceData.deviceListPPR);
+                        devs.AddRange(DeviceData.deviceListExc);
+                        devs = devs.Distinct().ToList();
+                        break;
+                    case 1: devs = DeviceData.deviceListMain; break;
+                    case 2: devs = DeviceData.deviceListPPR; break;
+                    case 3: devs = DeviceData.deviceListExc; break;
+                }
             }
 
             if (!settings.Field.Contains(8) ||
@@ -301,9 +328,9 @@ namespace Metr.Classes
                         }
                         sl.SaveAs(saveFileDialog.FileName);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        
+
                     }
 
                 }

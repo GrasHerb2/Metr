@@ -1,10 +1,12 @@
 ﻿using Metr.Classes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Metr._Windows
 {
@@ -12,7 +14,7 @@ namespace Metr._Windows
     /// Логика взаимодействия для ExcelExportWindow.xaml
     /// </summary>
     public partial class ExportWindow : Window
-    {
+    {        
         List<Classes.Column> Columns = new List<Classes.Column>();
         EClass localSettings = new EClass();
         public ExportWindow()
@@ -21,8 +23,7 @@ namespace Metr._Windows
 
             EClass.UpdPresets();
 
-            UpdateSettings(EClass.Presets[0]);
-
+            UpdateSettings(EClass.Presets[0]);            
             TableTypeCmB.SelectedIndex = 0;
         }
         void UpdateSettings(EClass a)
@@ -98,6 +99,24 @@ namespace Metr._Windows
         private void delBtn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+    }
+
+    public class ComboBoxSelectedItemConverter : IValueConverter
+    {        
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int)
+            {
+                return EClass.converted[(int)value < EClass.converted.Count ? (int)value : 0];
+            }
+
+            return string.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
