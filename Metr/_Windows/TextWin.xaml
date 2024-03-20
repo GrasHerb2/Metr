@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Metr._Windows"
         mc:Ignorable="d"
-        Title="TextWin" Height="148" Width="300">
+        Title="TextWin" Height="148" Width="300" ResizeMode="NoResize">
     <Viewbox>
         <StackPanel>
             <Label x:Name="mainLbl" Content="А"/>

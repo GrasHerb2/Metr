@@ -41,7 +41,10 @@ namespace Metr
                 paramTxt.Text = dev.Param;
                 objectCB.Text = dev.Object.Name;
                 chbPPR.IsChecked = noppr;
-                periodTxt.Text = dev.NoteText != null ? ((dev.NoteText.Split(':')[1]+"").Contains("^per+") ? dev.NoteText.Split(':')[1].Split('+')[1].Split('^')[0] : "") : "";
+                periodTxt.Text = 
+                    (dev.NoteText != null && dev.NoteText.Contains(":")) ? 
+                    ((dev.NoteText.Split(':')[1]+"").Contains("^per+") ? 
+                    dev.NoteText.Split(':')[1].Split('+')[1].Split('^')[0] : "") : "";
             }
         }
 

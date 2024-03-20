@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 
 namespace Metr.Classes
-{   
+{
     public static class SettingsClass
     {
         public static string status { get; set; }
         public static string prelogin { get; set; }
-        public static List<EClass> EPresets { get; set; }
+        public static List<EClass> EPresets { get; set; } = new List<EClass>();
         static string saveFile = @"./settings.txt";
         static string saveText = "";
         static bool fEx = false;
@@ -54,6 +53,32 @@ namespace Metr.Classes
             }
         }
 
+        public static void UpdESets()
+        {
+            FileCheck();
+            EPresets.Clear();
+            foreach (string p in saveText.Split('├')[1].Split('█'))
+            {
+                try
+                {
+                    if (p != "")
+                    {
+                        EPresets.Add(new EClass()
+                        {
+                            Name = p.Split('▌')[0],
+                            CHeader = p.Split('▌')[1].Split('▀').ToList(),
+                            Field = p.Split('▌')[2].Split('▀').Select(int.Parse).ToList(),
+                            Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
+                        });
+                    }
+                }
+                catch
+                {
+                    break;
+                }
+            }
+        }
+
         public static void SaveLogin(string LogString)
         {
             FileCheck();
@@ -65,36 +90,46 @@ namespace Metr.Classes
         public static void SavePreset(EClass preset)
         {
             FileCheck();
-            presetText = '█' + preset.Name + '▌';
+            if (preset.Name + "" == "") preset.Name = "Иной";
+            if (EClass.Presets.Any(p => p.Name == preset.Name))
+                for (int i = 0; i!=-1; i++)
+                {
+                    if (!EClass.Presets.Any(p => p.Name == preset.Name + i))
+                    {
+                        presetText = "█" + preset.Name + i + "▌";
+                        break;
+                    }
+                }
+            else
+                presetText = "█" + preset.Name + "▌";
 
-            foreach (string Header in preset.CHeader) presetText += Header + '▀';
-            presetText = presetText.Remove(presetText.Length - 1) + '▌';
+            foreach (string Header in preset.CHeader) presetText += Header + "▀";
+            presetText = presetText.Remove(presetText.Length - 1) + "▌";
 
-            foreach (int Field in preset.Field) presetText += Field + '▀';
-            presetText = presetText.Remove(presetText.Length - 1) + '▌';
+            foreach (int Field in preset.Field) presetText += Field + "▀";
+            presetText = presetText.Remove(presetText.Length - 1) + "▌";
 
-            foreach (int Settings in preset.Settings) presetText += Settings + '▀';
-            presetText = presetText.Remove(presetText.Length - 1) + '▌';
+            foreach (int Settings in preset.Settings) presetText += Settings + "▀";
+            presetText = presetText.Remove(presetText.Length - 1) + "▌";
 
-            System.IO.File.WriteAllText(saveFile, saveText);
+            System.IO.File.WriteAllText(saveFile, saveText+presetText);
+
+            UpdESets();
+            EClass.UpdPresets();
         }
 
-        static EClass tpreset = new EClass();
-        public static void DelPreset(EClass preset)
+        public static void DelPreset(string preset)
         {
+
             foreach (string p in saveText.Split('├')[1].Split('█'))
             {
-                tpreset = new EClass()
-                {
-                    Name = p.Split('▌')[0],
-                    CHeader = p.Split('▌')[1].Split('▀').ToList(),
-                    Field = p.Split('▌')[2].Split('▀').Select(int.Parse).ToList(),
-                    Settings = p.Split('▌')[3].Split('▀').Select(int.Parse).ToList()
-                };
-                if (preset == tpreset)
-                    saveText.Remove(saveText.IndexOf(p) - 1, p.Length + 1);
+                if (preset == p.Split('▌')[0])
+                    saveText= saveText.Remove(saveText.IndexOf(p) - 1, p.Length + 1);
             }
             System.IO.File.WriteAllText(saveFile, saveText);
+
+            UpdESets();
+            EClass.UpdPresets();
         }
     }
 }

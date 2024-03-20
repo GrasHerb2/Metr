@@ -42,9 +42,9 @@ namespace Metr
         {
             InitializeComponent();
 
+            this.WindowState = WindowState.Maximized;
+
             
-
-
             try
             {
                 SettingsClass.LoadSettings();

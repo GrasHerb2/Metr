@@ -256,10 +256,10 @@ namespace Metr.Classes
                                     style = sl.GetCellStyle(2, h + 1);
                                     style.Border.Outline = true;
 
-                                    style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                    style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                    style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                    style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetLeftBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetRightBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetTopBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetBottomBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
 
                                     sl.SetCellStyle(2, h + 1, style);
                                 }
@@ -274,10 +274,10 @@ namespace Metr.Classes
                                         style = sl.GetCellStyle(i + 3, j + 1);
                                         style.Border.Outline = true;
 
-                                        style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                        style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                        style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                        style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetLeftBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetRightBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetTopBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                        style.Border.SetBottomBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
 
                                         sl.SetCellStyle(i + 3, j + 1, style);
                                     }
@@ -296,10 +296,10 @@ namespace Metr.Classes
                                 style = sl.GetCellStyle(2, h + 1);
                                 style.Border.Outline = true;
 
-                                style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetLeftBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetRightBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetTopBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                style.Border.SetBottomBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
 
                                 sl.SetCellStyle(2, h + 1, style);
                             }
@@ -314,10 +314,10 @@ namespace Metr.Classes
                                     style = sl.GetCellStyle(i + 3, j + 1);
                                     style.Border.Outline = true;
 
-                                    style.Border.SetLeftBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                    style.Border.SetRightBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                    style.Border.SetTopBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
-                                    style.Border.SetBottomBorder(DocumentFormat.OpenXml.Spreadsheet.BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetLeftBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetRightBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetTopBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
+                                    style.Border.SetBottomBorder(BorderStyleValues.Thin, System.Drawing.Color.Black);
 
                                     style.SetWrapText(true);
                                     sl.SetCellStyle(i + 3, j + 1, style);

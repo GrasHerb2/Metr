@@ -41,11 +41,13 @@ C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\ExportWindow.g.
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\MainWindow.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\DeviceWin.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\RegWindow.g.cs
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\StatusWin.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\TextWin.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\UserActivate.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\UserManagmentWindow.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\App.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr_Content.g.cs
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr_MarkupCompile.cache
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr_MarkupCompile.lref
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\App.baml
@@ -55,6 +57,7 @@ C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\ExportWindow.ba
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\MainWindow.baml
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\DeviceWin.baml
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\RegWindow.baml
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\StatusWin.baml
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\TextWin.baml
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\UserActivate.baml
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\UserManagmentWindow.baml
@@ -62,9 +65,6 @@ C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.g.resources
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.Properties.Resources.resources
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.csproj.GenerateResource.cache
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.csproj.CoreCompileInputs.cache
-C:\Users\Gras\source\repos\GrasHerb\Metr\Metr\obj\Debug\Metr.csproj.Up2Date
+C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.csproj.Up2Date
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.exe
 C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\Metr.pdb
-C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\StatusWin.g.cs
-C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\_Windows\StatusWin.baml
-C:\Users\Gras\Source\Repos\GrasHerb\Metr\Metr\obj\Debug\GeneratedInternalTypeHelper.g.cs

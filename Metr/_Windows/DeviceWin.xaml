@@ -14,11 +14,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Click="WindowPin_Click" x:Name="WindowPin" Grid.Column="2" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
-                <Button.Background>
-                    <ImageBrush ImageSource="/_Windows/vecteezy_push-pin-icon-sign-symbol-design_10149654.png"/>
-                </Button.Background>
-            </Button>
+            <Button Click="WindowPin_Click" x:Name="WindowPin" Grid.Column="2" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Background="Transparent" Content="📌"/>
             <StackPanel Margin="5" Grid.Column="1">
                 <Label Content="Название прибора*"/>
                 <TextBox Width="200" x:Name="nameTxt"/>

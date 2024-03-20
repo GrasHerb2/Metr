@@ -19,14 +19,18 @@ namespace Metr._Windows
     /// </summary>
     public partial class TextWin : Window
     {
-        public TextWin()
+        public string textOut { get; set; }
+        public TextWin(string Message, string Header)
         {
             InitializeComponent();
+            this.mainLbl.Content = Message;
+            this.Title = Header;
         }
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            textOut = inputTxt.Text;
+            DialogResult = true;
         }
     }
 }

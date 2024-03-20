@@ -1,4 +1,5 @@
-﻿using Metr.Classes;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Metr.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,16 +15,15 @@ namespace Metr._Windows
     /// Логика взаимодействия для ExcelExportWindow.xaml
     /// </summary>
     public partial class ExportWindow : Window
-    {        
+    {
         List<Classes.Column> Columns = new List<Classes.Column>();
         EClass localSettings = new EClass();
         public ExportWindow()
         {
             InitializeComponent();
-
             EClass.UpdPresets();
 
-            UpdateSettings(EClass.Presets[0]);            
+            UpdateSettings(EClass.Presets[0]);
             TableTypeCmB.SelectedIndex = 0;
         }
         void UpdateSettings(EClass a)
@@ -43,19 +43,6 @@ namespace Metr._Windows
 
         private void TableTypeCmB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TableTypeCmB.SelectedIndex > 3)
-            {
-                OriginTableCmB.IsEnabled = true;
-                delBtn.Visibility = Visibility.Hidden;
-                saveBtn.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                OriginTableCmB.IsEnabled = false;
-                delBtn.Visibility = Visibility.Visible;
-                saveBtn.Visibility = Visibility.Visible;
-            }
-
             UpdateSettings(EClass.Presets[TableTypeCmB.SelectedIndex]);
         }
 
@@ -93,17 +80,38 @@ namespace Metr._Windows
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
+            TextWin textWin = new TextWin("Название набора настроек", "Экспорт");
+            textWin.ShowDialog();
+            if (!textWin.DialogResult.Value)
+            {
+                MessageBox.Show("Сохранение отменено", "Экспорт", MessageBoxButton.OK, MessageBoxImage.Information);
+                e.Handled = true;
+            }
+            localSettings.Name = textWin.textOut;
+            localSettings.CHeader = Columns.Select(p => p.Header).ToList();
+            localSettings.Field = Columns.Select(p => p.Field).ToList();
+            localSettings.Settings = new List<int> { SearchUseChB.IsChecked.Value ? 1 : 0, OriginTableCmB.SelectedIndex, ObjSortChB.IsChecked.Value ? 1 : 0 };
 
+            SettingsClass.SavePreset(localSettings);
+            UpdateSettings(localSettings);
         }
 
         private void delBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (TableTypeCmB.SelectedIndex > 4)
+            {
+                int a = TableTypeCmB.SelectedIndex;
+                SettingsClass.DelPreset(EClass.Presets[a].Name);
 
+                TableTypeCmB.SelectedIndex = 0;
+            }
+            else
+                e.Handled = true;
         }
     }
 
     public class ComboBoxSelectedItemConverter : IValueConverter
-    {        
+    {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is int)
