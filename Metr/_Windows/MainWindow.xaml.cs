@@ -57,6 +57,7 @@ namespace Metr
             logIn();
             Thread thread = new Thread(UpdateTabs) { IsBackground = true };
             thread.Start();
+            EClass.UpdPresets();
         }
         //Метод запроса авторизации
         void logIn()
@@ -568,5 +569,9 @@ namespace Metr
             }
         }
 
+        private void cExp_Click(object sender, RoutedEventArgs e)
+        {            
+            EClass.Export(EClass.Presets[2], deviceGrid.SelectedItems as List<DeviceData>);
+        }
     }
 }

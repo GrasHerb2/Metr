@@ -188,10 +188,6 @@ namespace Metr
                     MessageBox.Show("Активация учётной записи произведена", "Активация", MessageBoxButton.OK, MessageBoxImage.Information);
                     UpdateTabs();
                 }
-                else
-                {
-                    MessageBox.Show("Активация учётной записи отменена","Активация",MessageBoxButton.OK,MessageBoxImage.Information);
-                }
             }
         }
 
