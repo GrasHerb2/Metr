@@ -139,7 +139,7 @@ namespace Metr
                     Exp = expChB.IsChecked.Value;
                     searchStart = expDateStart.SelectedDate != null ? expDateStart.SelectedDate : DateTime.MinValue;
                     searchEnd = expDateEnd.SelectedDate != null ? expDateEnd.SelectedDate : DateTime.MaxValue;
-                    dSearch = new List<string>() { searchTBNum.Text, searchTBName.Text };
+                    dSearch = new List<string>() { searchTBNum.Text.ToLower(), searchTBName.Text.ToLower() };
                     searchHide = hideCheck.IsChecked.Value;
                 }));
 
@@ -188,8 +188,10 @@ namespace Metr
                     List<Device> devicesUnHide = new List<Device>();
                     foreach (DeviceData d in deviceGrid.SelectedItems)
                     {
-                        devicesHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID && !(dev.NoteText + "").Contains("^hid^")).FirstOrDefault());
-                        devicesUnHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID && (dev.NoteText + "").Contains("^hid^")).FirstOrDefault());
+                        if (d.Hidden)
+                            devicesUnHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
+                        else
+                            devicesHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
                     }
                     if (devicesHide.Count() > 0) DeviceData.deviceHide(devicesHide, context, User.Id);
                     if (devicesUnHide.Count() > 0) DeviceData.deviceUnHide(devicesUnHide, context, User.Id);
@@ -348,7 +350,6 @@ namespace Metr
                     case 0:
                         itemCountLbl.Content = DeviceData.infoMain;
                         hideCheck.IsEnabled = true;
-                        checksStack.IsEnabled = true;
                         expChB.IsEnabled = true;
                         DatePickers.IsEnabled = true;
                         dateChB.IsEnabled = false;
@@ -357,7 +358,6 @@ namespace Metr
                         itemCountLbl.Content = DeviceData.infoPPR;
                         hideCheck.IsEnabled = false;
                         dateChB.IsEnabled = true;
-                        checksStack.IsEnabled = false;
                         expChB.IsEnabled = false;
                         DatePickers.IsEnabled = !dateChB.IsChecked.Value;
                         addBtn.IsEnabled = false;
@@ -366,7 +366,6 @@ namespace Metr
                         itemCountLbl.Content = DeviceData.infoExc;
                         hideCheck.IsEnabled = false;
                         dateChB.IsEnabled = false;
-                        checksStack.IsEnabled = false;
                         expChB.IsEnabled = false;
                         DatePickers.IsEnabled = false;
                         addBtn.IsEnabled = false;

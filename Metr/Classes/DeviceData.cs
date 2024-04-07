@@ -159,15 +159,15 @@ namespace Metr.Classes
             if (dSearch[0] != "")
             {
                 deviceListMain = deviceListMain.Where(d =>
-                    d.FNum == dSearch[0]
+                    d.FNum.ToLower().Contains(dSearch[0])
                     ).ToList();
 
                 deviceListPPR = deviceListPPR.Where(d =>
-                    d.FNum == dSearch[0]
+                    d.FNum.ToLower().Contains(dSearch[0])
                     ).ToList();
 
                 deviceListExc = deviceListExc.Where(d =>
-                    d.FNum == dSearch[0]
+                    d.FNum.ToLower().Contains(dSearch[0])
                     ).ToList();
             }
 
@@ -200,15 +200,15 @@ namespace Metr.Classes
             }
 
             deviceListMain = deviceListMain.Where(d =>
-            d.Name.Contains(dSearch[1])
+            d.Name.ToLower().Contains(dSearch[1])
             ).ToList();
 
             deviceListPPR = deviceListPPR.Where(d =>
-            d.Name.Contains(dSearch[1])
+            d.Name.ToLower().Contains(dSearch[1])
             ).ToList();
 
             deviceListExc = deviceListExc.Where(d =>
-            d.Name.Contains(dSearch[1])
+            d.Name.ToLower().Contains(dSearch[1])
             ).ToList();
             //Конец поиска исключённых
 

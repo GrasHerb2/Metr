@@ -179,8 +179,8 @@ namespace Metr.Classes
         /// <summary>
         /// Деактивация учётной записи пользователя
         /// </summary>
-        /// <param name="delLogin">Логин отключаемой учётной записи</param>
-        /// <param name="admLogin">Логин учётной записи диактивирующего</param>
+        /// <param name="delIndex">Логин отключаемой учётной записи</param>
+        /// <param name="admIndex">Логин учётной записи диактивирующего</param>
         /// <returns>Возвращает объект класса tResult хранящий объект отключенной учётной записи, запись  журнал аудита и код операции: 0=Операция успешна  -1=Ошибка отключения</returns>
         public static tResult deactiveEmp(int delIndex, int admIndex)
         {

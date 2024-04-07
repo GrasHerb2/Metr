@@ -200,5 +200,10 @@ namespace Metr
         {
             userRegister();
         }
+
+        private void uCnlBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

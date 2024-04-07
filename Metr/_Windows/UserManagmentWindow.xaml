@@ -58,6 +58,7 @@
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Регистрировать" x:Name="uRegBtn" Click="uRegBtn_Click"/>
+                                <MenuItem Header="Отмена" x:Name="uCnlBtn" Click="uCnlBtn_Click"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
