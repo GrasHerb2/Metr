@@ -15,9 +15,9 @@ namespace Metr
         public AuthWindow()
         {
             InitializeComponent();
-            if (SettingsClass.prelogin != "")
+            if (SettingsClass.prelogin[0] != "")
             {
-                loginTxt.Text = SettingsClass.prelogin;
+                loginTxt.ItemsSource = SettingsClass.prelogin;
                 logSaveRB.IsChecked = true;
             }
             loginTxt.Focus();

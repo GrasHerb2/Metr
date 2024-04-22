@@ -6,7 +6,7 @@ namespace Metr.Classes
     public static class SettingsClass
     {
         public static string status { get; set; }
-        public static string prelogin { get; set; }
+        public static List<string> prelogin { get; set; } = new List<string>();
         public static List<EClass> EPresets { get; set; } = new List<EClass>();
         static string saveFile = @"./settings.txt";
         static string saveText = "";
@@ -29,7 +29,7 @@ namespace Metr.Classes
         {
             FileCheck();
 
-            prelogin = saveText.Split('╟')[1][0] == '↔' ? "" : saveText.Split('╟')[1].Split('├')[0];
+            prelogin.AddRange(saveText.Split('╟')[1][0] == '↔' ? new string[0] : saveText.Split('╟')[1].Split('├')[0].Split('╧'));
 
             foreach (string p in saveText.Split('├')[1].Split('█'))
             {
@@ -82,8 +82,11 @@ namespace Metr.Classes
         public static void SaveLogin(string LogString)
         {
             FileCheck();
-            saveText = "╟" + LogString + "├" + saveText.Split('├')[1];
-            System.IO.File.WriteAllText(saveFile, saveText);
+            if (!saveText.Contains(LogString))
+            {
+                saveText = saveText.Split('├')[0] + "╧" + LogString + "├" + saveText.Split('├')[1];
+                System.IO.File.WriteAllText(saveFile, saveText);
+            }
         }
 
         static string presetText = "";

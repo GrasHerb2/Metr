@@ -41,6 +41,7 @@ namespace Metr
             }
 
             mainGrid.ItemsSource = UControl.UserData;
+            regGrid.ItemsSource = null;
             regGrid.ItemsSource = register;
             regUsersTab.Header = "Регистрация " + register.Count();
             deaGrid.ItemsSource = UControl.UserDataDeactive;

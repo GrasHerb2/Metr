@@ -9,7 +9,7 @@
     <Viewbox>
         <StackPanel Margin="10">
             <Label Content="Логин" TabIndex="0"/>
-            <TextBox Width="150" x:Name="loginTxt" TabIndex="1"/>
+            <ComboBox IsEditable="True" Width="150" x:Name="loginTxt" TabIndex="1"/>
             <RadioButton x:Name="logSaveRB" Margin="5" Content="Сохранить логин?" FontSize="11" TabIndex="2"/>
             <Label Content="Пароль"/>
             <PasswordBox Width="150" x:Name="passTxt" TabIndex="3"/>
