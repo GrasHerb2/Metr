@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Metr"
         mc:Ignorable="d"
-        Title="UserManagmentWindow" Height="450" Width="800">
+        Title="Пользователи" Height="450" Width="800">
     
     <Viewbox VerticalAlignment="Top" Width="800">
         <StackPanel>
@@ -20,7 +20,7 @@
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="1.5*" Header="ФИО" Binding="{Binding fullName}">
+                            <DataGridTextColumn Width="*" Header="ФИО" Binding="{Binding fullName}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
                                         <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
@@ -28,10 +28,10 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTemplateColumn Width="*" Header="Действия в системе" >
+                            <DataGridTemplateColumn Width="auto" Header="Действия" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="userActionsBtn" Click="userActionsBtn_Click"/>
+                                        <Button x:Name="userActionsBtn" Content="🔍" Width="30" Click="userActionsBtn_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -100,10 +100,10 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTemplateColumn Width="*" Header="Действия" >
+                            <DataGridTemplateColumn Width="auto" Header="Действия" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="deaActionsBtn" Click="deaActionsBtn_Click"/>
+                                        <Button x:Name="deaActionsBtn" Content="🔍" Width="30" Click="deaActionsBtn_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

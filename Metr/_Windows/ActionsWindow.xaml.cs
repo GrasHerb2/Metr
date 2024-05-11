@@ -23,13 +23,14 @@ namespace Metr
         List<Actions> actionsList;
         MetrBaseEntities context = MetrBaseEntities.GetContext();
         public int userID { get; set; }
-        public ActionsWindow()
+        public ActionsWindow(int uID = 0)
         {
             InitializeComponent();
             searchTBFN.ItemsSource = context.User.Where(a=>a.Actions.Count!=0).Select(a=>a.FullName).ToList();
+            userID = uID;
             try
             {
-                searchTBFN.Text = userID != 0 ? context.Actions.Where(a => a.UserID == userID).FirstOrDefault().User.FullName : "";
+                searchTBFN.Text = userID != 0 ? context.User.Where(a => a.User_ID == userID).FirstOrDefault().FullName : "";
             }
             catch { }
             Update();

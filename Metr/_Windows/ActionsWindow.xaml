@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Metr"
         mc:Ignorable="d"
-        Title="Журнал действий" ResizeMode="NoResize" MinHeight="450" MinWidth="730">
+        Title="Журнал действий" MinHeight="450" MinWidth="730">
     <Viewbox VerticalAlignment="Top">
         <StackPanel>
             <DataGrid x:Name="mainGrid" Height="430" Width="710" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" RowEditEnding="mainGrid_RowEditEnding">

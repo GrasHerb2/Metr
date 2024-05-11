@@ -49,7 +49,7 @@ namespace Metr
             deaUsersTab.Visibility = UControl.UserDataDeactive.Count() != 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        ActionsWindow actionsWindow = new ActionsWindow();
+        
         void uActionsShow()
         {
 
@@ -58,9 +58,8 @@ namespace Metr
                 MessageBox.Show("Выберите учётную запись", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
             UControl user = mainGrid.SelectedItem as UControl;
-            actionsWindow.userID = user.userID;
+            ActionsWindow actionsWindow = new ActionsWindow(user.userID);
             actionsWindow.ShowDialog();
         }
         private void userActionsBtn_Click(object sender, RoutedEventArgs e)
@@ -143,9 +142,8 @@ namespace Metr
                 MessageBox.Show("Выберите учётную запись", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
             UControl user = deaGrid.SelectedItem as UControl;
-            actionsWindow.userID = user.userID;
+            ActionsWindow actionsWindow = new ActionsWindow(user.userID);
             actionsWindow.ShowDialog();
         }
         private void deaActions_Click(object sender, RoutedEventArgs e)
