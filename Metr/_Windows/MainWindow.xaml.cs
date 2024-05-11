@@ -110,7 +110,7 @@ namespace Metr
                     pprGrid.ItemsSource = DeviceData.deviceListPPR;
 
                     excGrid.ItemsSource = null;
-                    excGrid.ItemsSource = DeviceData.deviceListExc;
+                    excGrid.ItemsSource = DeviceData.deviceListExc;                    
 
                     pBar.Visibility = Visibility.Collapsed;
                     searchTBObj.ItemsSource = (context.Object.OrderBy(d => d.Name).Select(d => d.Name).ToList());
@@ -272,6 +272,8 @@ namespace Metr
                 searchTBName.Text = "";
                 searchTBObj.Text = "";
                 objects.Clear();
+                ObjListView.ItemsSource = null;
+                ObjListView.ItemsSource = objects;
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
                 thread.Start();
             }
