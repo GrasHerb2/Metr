@@ -495,13 +495,18 @@ namespace Metr
             ObjListView.ItemsSource = null;
             ObjListView.ItemsSource = objects;
         }
-
         private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            objects.RemoveAt(ObjListView.SelectedIndex);
+            try
+            {
+                objects.RemoveAt(ObjListView.SelectedIndex);
 
-            ObjListView.ItemsSource = null;
-            ObjListView.ItemsSource = objects;
+        
+                ObjListView.ItemsSource = null;
+
+                ObjListView.ItemsSource = objects; 
+            }
+            catch { }
         }
 
         
