@@ -29,7 +29,7 @@ namespace Metr.Classes
         {
             FileCheck();
 
-            prelogin.AddRange(saveText.Split('╟')[1][0] == '↔' ? new string[0] : saveText.Split('╟')[1].Split('├')[0].Split('╧'));
+            prelogin.AddRange(saveText.Split('╟')[1][0] == '↔' ? new string[1] : saveText.Split('╟')[1].Split('├')[0].Split('╧'));
 
             foreach (string p in saveText.Split('├')[1].Split('█'))
             {

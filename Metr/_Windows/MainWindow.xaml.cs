@@ -92,7 +92,7 @@ namespace Metr
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    objNames = MetrBaseEntities.GetContext().Object.Select(o => o.Name).ToList();
+                    objNames = MetrBaseEntities.GetContext().Object.Where(o=>o.Device.Count()!=0).Select(o => o.Name).ToList();
                     pBar.Visibility = Visibility.Visible;
                 }));
 
