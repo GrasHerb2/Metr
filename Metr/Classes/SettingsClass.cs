@@ -29,7 +29,7 @@ namespace Metr.Classes
         {
             FileCheck();
 
-            prelogin.AddRange(saveText.Split('╟')[1][0] == '↔' ? new string[1] : saveText.Split('╟')[1].Split('├')[0].Split('╧'));
+            prelogin.AddRange(saveText.Contains("↔") ? new string[1] : saveText.Split('╟')[1].Split('├')[0].Split('╧'));
 
             foreach (string p in saveText.Split('├')[1].Split('█'))
             {
@@ -84,7 +84,8 @@ namespace Metr.Classes
             FileCheck();
             if (!saveText.Contains(LogString))
             {
-                saveText = saveText.Split('├')[0] + "╧" + LogString + "├" + saveText.Split('├')[1];
+                saveText = saveText.Contains("↔") ? saveText.Replace("↔", "") : saveText;
+                saveText = saveText.Split('├')[0] + LogString + "╧" + "├" + saveText.Split('├')[1];
                 System.IO.File.WriteAllText(saveFile, saveText);
             }
         }
