@@ -193,8 +193,8 @@ namespace Metr
                         else
                             devicesHide.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
                     }
-                    if (devicesHide.Count() > 0) DeviceData.deviceHide(devicesHide, context, User.Id);
-                    if (devicesUnHide.Count() > 0) DeviceData.deviceUnHide(devicesUnHide, context, User.Id);
+                    if (devicesHide.Count() != 0) DeviceData.deviceHide(devicesHide, context, User.Id);
+                    if (devicesUnHide.Count() != 0) DeviceData.deviceUnHide(devicesUnHide, context, User.Id);
                 }
                 else MessageBox.Show("Для изменения видимости необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
@@ -212,13 +212,17 @@ namespace Metr
             {
                 if (User.RoleID >= 2)
                 {
-                    List<Device> devices = new List<Device>();
+                    List<Device> devicesDel = new List<Device>();
+                    List<Device> devicesRec = new List<Device>();
                     foreach (DeviceData d in deviceGrid.SelectedItems)
                     {
-                        devices.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
+                        if (d.Delete)
+                            devicesRec.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
+                        else
+                            devicesDel.Add(context.Device.Where(dev => dev.Device_ID == d.ID).FirstOrDefault());
                     }
-                    DeviceData.deviceDel(devices, context, User.Id);
-                    DeviceData.deviceUnHide(devices, context, User.Id);
+                    if (devicesDel.Count() != 0) DeviceData.deviceDel(devicesDel, context, User.Id);
+                    if (devicesRec.Count() != 0) DeviceData.deviceRec(devicesRec, context, User.Id);
                 }
                 else MessageBox.Show("Для удаления необходимо иметь роль 'Пользователь' или выше");
                 Thread thread = new Thread(UpdateTabs) { IsBackground = true };
